@@ -158,8 +158,7 @@ class RegistrationViewController: BaseViewController, UITextFieldDelegate, LoadJ
         if promo != "" {
             dict["promo"]  = promo
         }
-        let url = "https://6vkusov.by/api/register"
-        JsonHelperLoad(url: url, params: dict, act: self, sessionName: "registration").startSession()
+        JsonHelperLoad(url: REST_URL.SF_REGISTRATION.rawValue, params: dict, act: self, sessionName: "registration").startSession()
     }
     
     func loadComplete(obj: Dictionary<String, AnyObject>?, sessionName: String?) {
@@ -167,15 +166,11 @@ class RegistrationViewController: BaseViewController, UITextFieldDelegate, LoadJ
             if (sessionName == "registration"){
                 let code = response["status"] as! Int
                 if code == 1 {
-                    do{
-                        let vc = self.navigationController?.viewControllers[1] as! LoginViewController
-                        vc.message.text = "Вы успешно зарегистрированы, Вам на почту отправлена ссылка для активации"
-                        self.regBtn.isEnabled = true
-                        let _ = self.navigationController?.popViewController(animated: true)
-                    }catch let error as NSError {
-                        print("Error Server \(error)")
-                        self.regBtn.isEnabled = true
-                    }
+                    let vc = self.navigationController?.viewControllers[1] as! LoginViewController
+                    vc.message.text = "Вы успешно зарегистрированы, Вам на почту отправлена ссылка для активации"
+                    self.regBtn.isEnabled = true
+                    let _ = self.navigationController?.popViewController(animated: true)
+                    self.regBtn.isEnabled = true
                 }else{
                     alertShow(textError: response["message"] as! String)
                     self.regBtn.isEnabled = true
@@ -211,14 +206,5 @@ class RegistrationViewController: BaseViewController, UITextFieldDelegate, LoadJ
         passwordConfirm.returnKeyType = UIReturnKeyType.done
         promo.returnKeyType = UIReturnKeyType.done
     }
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
 
 }

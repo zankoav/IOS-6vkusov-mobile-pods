@@ -13,10 +13,9 @@ public enum REST_URL: String {
     case SF_RESTAURANTS = "https://6vkusov.by/api/restaurants"
     case SF_USER = "https://6vkusov.by/api/user"
     case SF_DOMAIN = "https://6vkusov.by"
-
+    case SF_LOGIN = "https://6vkusov.by/api/login"
+    case SF_REGISTRATION = "https://6vkusov.by/api/register"
     
-//    case SF_REGISTRATION = "http://6vkusov:f91DCoC@6vkusov.by/api/register"
-//    case SF_LOGIN = "http://6vkusov:f91DCoC@6vkusov.by/api/login"
 //    case SF_RESTAURANT_MENU = "http://6vkusov:f91DCoC@6vkusov.by/api/restaurant_categories"
 //    case SF_RESTAURANT_COMMENTS = "http://6vkusov:f91DCoC@6vkusov.by/api/restaurant_comments"
 //    case SF_RESTAURANT_FOOD = "http://6vkusov:f91DCoC@6vkusov.by/api/food"
@@ -154,5 +153,45 @@ class LocalStorage: LoadJson{
         }
         return categories
     }
+    
+    func getAllRestaurants()->[Restaurant]{
+        var restaurants = [Restaurant]()
+        let str = getDataStorage(key: APP_RESTAURANTS)
+        if let data = str?.data(using: .utf8) {
+            do {
+                let allRestaurants = try JSONSerialization.jsonObject(with: data, options: []) as! Dictionary<String,AnyObject>
+                let img_path = allRestaurants["img_path"] as! String
+                let array = allRestaurants["restaurants"] as! [Dictionary<String,AnyObject>]
+                for rest in array {
+                    let slug = rest["slug"] as! String
+                    let name = rest["name"] as! String
+                    let working_time = rest["working_time"] as! String
+                    let minimal_price = rest["minimal_price"] as! Float
+                    var delivery_time = rest["delivery_time"] as? String
+                    if delivery_time == nil{
+                        delivery_time = ""
+                    }
+                    let kitchens = rest["kitchens"] as! [String]
+                    var description = rest["description"] as? String
+                    if description == nil{
+                        description = ""
+                    }
+                    let logoImg = rest["logo"] as? String
+                    var iconURL = ""
+                    if let logo = logoImg{
+                        iconURL = REST_URL.SF_DOMAIN.rawValue + img_path + "/" + logo
+                    }
+                    
+                    let comments = rest["comments"] as! Dictionary<String,Int>
+                    let restaurant = Restaurant(slug: slug, name: name, working_time: working_time, minimal_price: minimal_price, delivery_time: delivery_time!, kitchens: kitchens, description: description!, iconURL: iconURL, comments: comments)
+                    restaurants.append(restaurant)
+                }
+            } catch let error as NSError {
+                print(error)
+            }
+        }
+        return restaurants
+    }
+
 
 }

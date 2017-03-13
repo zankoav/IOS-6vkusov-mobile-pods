@@ -132,8 +132,7 @@ class LoginViewController: BaseViewController, UITextFieldDelegate, LoadJson {
     
     private func sendHashToTheServer(email:String,password:String){
         let dict = ["email":email, "password":password]
-        let url = "https://6vkusov.by/api/login"
-        JsonHelperLoad(url: url, params: dict, act: self, sessionName: "login").startSession()
+        JsonHelperLoad(url: REST_URL.SF_LOGIN.rawValue, params: dict, act: self, sessionName: "login").startSession()
     }
     
     @IBAction func vkPressed(_ sender: Any) {

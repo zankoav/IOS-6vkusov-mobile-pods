@@ -33,7 +33,7 @@ class CategoriesViewController: BaseViewController, UITableViewDelegate, UITable
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         if(indexPath.section == 0){
-            return 150.0
+            return UIScreen.main.bounds.height/4
         }else{
             return 60.0
         }
