@@ -104,16 +104,17 @@
             </objects>
             <point key="canvasLocation" x="1072.5" y="-654.92957746478874"/>
         </scene>
-        <!--Рестораны-->
+        <!--Restaurants Table View Controller-->
         <scene sceneID="VPW-q2-z5D">
             <objects>
                 <tableViewController storyboardIdentifier="RestaurantsTableViewController" id="ywe-6I-T4Z" customClass="RestaurantsTableViewController" customModule="_vkusov_mobile" customModuleProvider="target" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="130" sectionHeaderHeight="28" sectionFooterHeight="28" id="fTA-jl-tqN">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" allowsSelection="NO" rowHeight="130" sectionHeaderHeight="28" sectionFooterHeight="28" id="fTA-jl-tqN">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <inset key="separatorInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                         <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="restaurant_cell" id="VPi-zd-ESb" customClass="RestaurantTableViewCell" customModule="_vkusov_mobile" customModuleProvider="target">
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="restaurant_cell" id="VPi-zd-ESb" customClass="RestaurantTableViewCell" customModule="_vkusov_mobile" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="28" width="320" height="130"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="VPi-zd-ESb" id="iLf-5f-kbf">
@@ -242,20 +243,10 @@
                             <outlet property="delegate" destination="ywe-6I-T4Z" id="vqg-GZ-3ui"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="Рестораны" id="C2s-sE-7NZ">
-                        <barButtonItem key="rightBarButtonItem" image="filter_clear" id="ckY-4Q-3m5">
-                            <connections>
-                                <action selector="filterPressed:" destination="ywe-6I-T4Z" id="073-dO-GAS"/>
-                            </connections>
-                        </barButtonItem>
-                    </navigationItem>
-                    <connections>
-                        <outlet property="filterButton" destination="ckY-4Q-3m5" id="UXc-sw-nD3"/>
-                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="57a-Wc-yOI" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2135.625" y="-655.9859154929577"/>
+            <point key="canvasLocation" x="2087" y="-1327"/>
         </scene>
         <!--Рестораны-->
         <scene sceneID="wU4-Jr-jJk">
@@ -272,8 +263,9 @@
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="130" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="jqt-ZW-Nlc">
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <inset key="separatorInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="restaurant_cell" id="Qdm-p9-CKW" customClass="RestaurantTableViewCell" customModule="_vkusov_mobile" customModuleProvider="target">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="restaurant_cell" id="Qdm-p9-CKW" customClass="RestaurantTableViewCell" customModule="_vkusov_mobile" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="28" width="320" height="130"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Qdm-p9-CKW" id="5N2-bt-Ijh">
@@ -405,6 +397,28 @@
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="jwW-wN-7QH">
                                 <rect key="frame" x="0.0" y="568" width="320" height="170"/>
                                 <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Минимальная сумма заказа" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QQP-AP-NgW">
+                                        <rect key="frame" x="8" y="12" width="304" height="16"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                                        <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="100" minValue="0.0" maxValue="100" translatesAutoresizingMaskIntoConstraints="NO" id="Q1k-On-LcL">
+                                        <rect key="frame" x="6" y="31" width="243" height="25"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="24" id="MbB-e1-MVF"/>
+                                        </constraints>
+                                        <color key="minimumTrackTintColor" red="0.56078431370000004" green="0.70196078429999997" blue="0.1529411765" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <connections>
+                                            <action selector="sliderAction:" destination="FBv-Jz-JLs" eventType="valueChanged" id="112-GF-pNa"/>
+                                        </connections>
+                                    </slider>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="до 0 руб." textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="elw-bl-tMN">
+                                        <rect key="frame" x="255" y="35" width="57" height="16"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                                        <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="oYX-rK-fxi" customClass="CheckBox" customModule="_vkusov_mobile" customModuleProvider="target">
                                         <rect key="frame" x="12" y="67" width="296" height="21"/>
                                         <constraints>
@@ -415,12 +429,6 @@
                                             <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
                                     </button>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Минимальная сумма заказа" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QQP-AP-NgW">
-                                        <rect key="frame" x="8" y="12" width="304" height="16"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="13"/>
-                                        <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="CYs-NC-LGz" customClass="CheckBox" customModule="_vkusov_mobile" customModuleProvider="target">
                                         <rect key="frame" x="12" y="92" width="296" height="21"/>
                                         <constraints>
@@ -452,19 +460,6 @@
                                             <color key="titleShadowColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         </state>
                                     </button>
-                                    <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="100" minValue="0.0" maxValue="100" translatesAutoresizingMaskIntoConstraints="NO" id="Q1k-On-LcL">
-                                        <rect key="frame" x="6" y="31" width="243" height="25"/>
-                                        <constraints>
-                                            <constraint firstAttribute="height" constant="24" id="MbB-e1-MVF"/>
-                                        </constraints>
-                                        <color key="minimumTrackTintColor" red="0.56078431370000004" green="0.70196078429999997" blue="0.1529411765" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                    </slider>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="до 0 руб." textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="elw-bl-tMN">
-                                        <rect key="frame" x="255" y="35" width="57" height="16"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="13"/>
-                                        <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
                                 </subviews>
                                 <color key="backgroundColor" red="0.74509803919999995" green="0.13725490200000001" blue="0.1764705882" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
@@ -512,8 +507,14 @@
                     </navigationItem>
                     <connections>
                         <outlet property="filterButton" destination="Qdi-Yg-XVu" id="6h2-Id-ptu"/>
+                        <outlet property="freeFoodBtn" destination="CYs-NC-LGz" id="VYN-uk-BUQ"/>
                         <outlet property="heightTableViewConstraint" destination="s4f-iT-oxs" id="x5s-XS-N6E"/>
+                        <outlet property="newBtn" destination="oYX-rK-fxi" id="7Io-qa-vA3"/>
+                        <outlet property="promoBtn" destination="buO-km-Nm5" id="Hge-kq-pgc"/>
+                        <outlet property="saleBtn" destination="8gS-0F-YUk" id="Orw-zB-gM2"/>
                         <outlet property="searchDisplayController" destination="7gY-3J-Ls9" id="oET-Vc-r6k"/>
+                        <outlet property="slider" destination="Q1k-On-LcL" id="3Jr-fd-m0b"/>
+                        <outlet property="sliderResult" destination="elw-bl-tMN" id="wmG-hv-9RU"/>
                         <outlet property="tableView" destination="jqt-ZW-Nlc" id="sG4-Ot-ue3"/>
                     </connections>
                 </viewController>
@@ -527,7 +528,7 @@
                     </connections>
                 </searchDisplayController>
             </objects>
-            <point key="canvasLocation" x="2949.375" y="-652.81690140845069"/>
+            <point key="canvasLocation" x="2087" y="-655"/>
         </scene>
         <!--Меню-->
         <scene sceneID="tne-QT-ifu">

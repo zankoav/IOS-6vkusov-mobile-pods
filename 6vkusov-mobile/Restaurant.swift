@@ -21,6 +21,7 @@ class Restaurant {
     private var _iconURL: String
     private var _comments: Dictionary<String,Int>
     
+    
 
     
     var slug:String{return _slug}
@@ -40,6 +41,14 @@ class Restaurant {
     var iconURL:String{return _iconURL}
 
     var comments: Dictionary<String,Int>{return _comments}
+    
+    var isNew :Bool {return true}
+    
+    var isFreeFood :Bool {return false}
+    
+    var isPromo :Bool {return true}
+    
+    var isSale :Bool {return false}
 
     
     init(slug: String, name: String, working_time: String, minimal_price: Float, delivery_time: String, kitchens: [String], description: String, iconURL: String, comments: Dictionary<String,Int>){
