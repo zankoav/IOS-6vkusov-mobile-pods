@@ -11,13 +11,20 @@ import UIKit
 @IBDesignable class TitleHeader: UIView {
 
     var view: UIView!
+    var slug:String!
+    var index:Bool = true {
+        didSet{
+            viewMain.backgroundColor = index ? UIColor(netHex: 0xFFF8EE) : UIColor(netHex: 0xF5FBFF)
+        }
+    }
 
+    @IBOutlet weak var viewMain: UIView!
     @IBOutlet weak var imageView: UIImageView!
     @IBOutlet weak var nameRest: UILabel!
     @IBOutlet weak var totalPrice: UILabel!
     @IBOutlet weak var statusOrder: UILabel!
     @IBOutlet weak var dateOrder: UILabel!
-    @IBOutlet weak var timeOrder: UILabel!
+    @IBOutlet weak var buttonComments: UIButton!
     
     
     override init(frame: CGRect)
@@ -29,6 +36,10 @@ import UIKit
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         self.commonInit()
+    }
+    
+    @IBAction func comment(_ sender: Any) {
+        print(slug)
     }
     
     private func commonInit()

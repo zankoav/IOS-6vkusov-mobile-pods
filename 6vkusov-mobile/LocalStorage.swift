@@ -192,6 +192,4 @@ class LocalStorage: LoadJson{
         }
         return restaurants
     }
-
-
 }

@@ -39,10 +39,20 @@ class MainViewController: BaseViewController {
             loginButton.setTitle("Войти", for: UIControlState.selected)
             loginButton.setTitle("Войти", for: UIControlState.highlighted)
         }else{
-            let email = singleton.getUser()?.getProfile()?["email"] as? String
-            loginButton.setTitle(email, for: UIControlState.normal)
-            loginButton.setTitle(email, for: UIControlState.selected)
-            loginButton.setTitle(email, for: UIControlState.highlighted)
+            
+            let userData = singleton.getUser()?.getProfile()
+            let firstName = userData?["firstName"] as? String
+            
+            loginButton.setTitle(firstName, for: UIControlState.normal)
+            loginButton.setTitle(firstName, for: UIControlState.selected)
+            loginButton.setTitle(firstName, for: UIControlState.highlighted)
+            
+            let img_path = userData?["img_path"] as! String
+            if let avatar = userData?["avatar"] as? String {
+                let url = REST_URL.SF_DOMAIN.rawValue + img_path + "/" + avatar
+                logoMenu.sd_setImage(with: URL(string: url), placeholderImage: UIImage(named:"checkBoxOn"))
+            }
+
         }
         
     }
@@ -54,7 +64,9 @@ class MainViewController: BaseViewController {
     
     @IBAction func profileOrLoginPressed(_ sender: Any) {
         let loginViewController = self.storyboard?.instantiateViewController(withIdentifier: "LoginViewController")
-        let profileViewController = self.storyboard?.instantiateViewController(withIdentifier: "ProfileViewController")
+        let profileViewController = self.storyboard?.instantiateViewController(withIdentifier: "UserTabViewController")
+
+            //self.storyboard?.instantiateViewController(withIdentifier: "ProfileViewController")
 
         singleton.getUser()?.getStatus() == STATUS.GENERAL ?
             self.navigationController?.pushViewController(loginViewController!, animated: true):

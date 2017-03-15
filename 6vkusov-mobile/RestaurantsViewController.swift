@@ -44,6 +44,9 @@ class RestaurantsViewController: BaseViewController, UITableViewDelegate, UITabl
     override func viewDidLoad()
     {
         super.viewDidLoad()
+        let backItem = UIBarButtonItem()
+        backItem.title = ""
+        navigationItem.backBarButtonItem = backItem
         restaurants = Singleton.currentUser().getStore()!.getAllRestaurants()
         fullRestaurants = restaurants
         initViews()

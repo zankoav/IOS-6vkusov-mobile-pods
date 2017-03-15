@@ -36,3 +36,25 @@ extension String {
         return self.characters.count
     }
 }
+
+typealias UnixTime = Int
+
+extension UnixTime {
+    private func formatType(form: String) -> DateFormatter {
+        let dateFormatter = DateFormatter()
+        dateFormatter.locale = Locale(identifier: "en_US")
+        dateFormatter.dateFormat = form
+        return dateFormatter
+    }
+    var dateFull: Date {
+        return Date(timeIntervalSince1970: Double(self))
+    }
+    var toHour: String {
+        return formatType(form: "HH:mm").string(from: dateFull)
+    }
+    var toDay: String {
+        return formatType(form: "MM/dd/yyyy").string(from: dateFull)
+    }
+}
+
+

@@ -10,7 +10,6 @@ import Foundation
 
 class Restaurant {
     
-    
     private var _slug:String
     private var _name:String
     private var _working_time:String
@@ -20,9 +19,6 @@ class Restaurant {
     private var _description: String
     private var _iconURL: String
     private var _comments: Dictionary<String,Int>
-    
-    
-
     
     var slug:String{return _slug}
     

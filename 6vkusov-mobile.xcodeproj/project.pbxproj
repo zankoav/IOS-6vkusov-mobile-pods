@@ -9,10 +9,16 @@
 /* Begin PBXBuildFile section */
 		07899DBA05CE1F1D8A3495AF /* Pods_6vkusov_mobile.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8AF249F011F2970CF4E5FF5B /* Pods_6vkusov_mobile.framework */; };
 		5B8F094CF40EB1584B459EA4 /* Pods_6vkusov_mobileUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7BC1C9D90159FAE116783937 /* Pods_6vkusov_mobileUITests.framework */; };
+		6002F7351E793B7A0016E047 /* Order.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6002F7341E793B7A0016E047 /* Order.swift */; };
 		6008D3E11E640ADA00627F1B /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6008D3DE1E640ADA00627F1B /* LoginViewController.swift */; };
 		6008D3E21E640ADA00627F1B /* LicensiaViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6008D3DF1E640ADA00627F1B /* LicensiaViewController.swift */; };
 		6008D3E31E640ADA00627F1B /* RemmemberPasswordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6008D3E01E640ADA00627F1B /* RemmemberPasswordViewController.swift */; };
 		601410A41E77C3CE001E3C6C /* RestaurantsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 601410A31E77C3CE001E3C6C /* RestaurantsTableViewController.swift */; };
+		601410B41E7809C3001E3C6C /* UserTabViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 601410B31E7809C3001E3C6C /* UserTabViewController.swift */; };
+		601410B71E782C13001E3C6C /* Suggest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 601410B61E782C13001E3C6C /* Suggest.swift */; };
+		601410B91E782D45001E3C6C /* SuggestTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 601410B81E782D45001E3C6C /* SuggestTableViewCell.swift */; };
+		601410BB1E783A3A001E3C6C /* OrderTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 601410BA1E783A3A001E3C6C /* OrderTableViewCell.swift */; };
+		601410BD1E783A8F001E3C6C /* BonusViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 601410BC1E783A8F001E3C6C /* BonusViewController.swift */; };
 		6018960F1E76905900E1439C /* Category.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6018960E1E76905900E1439C /* Category.swift */; };
 		601896121E76907D00E1439C /* CategoryTVCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 601896111E76907D00E1439C /* CategoryTVCell.swift */; };
 		6025D04B1E76ADD500D29D5B /* Restaurant.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6025D04A1E76ADD500D29D5B /* Restaurant.swift */; };
@@ -67,10 +73,16 @@
 		1156A07522CA33B3C59E8224 /* Pods-6vkusov-mobileUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-6vkusov-mobileUITests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-6vkusov-mobileUITests/Pods-6vkusov-mobileUITests.debug.xcconfig"; sourceTree = "<group>"; };
 		16A44B72BF35ED72C3D8EE71 /* Pods-6vkusov-mobileTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-6vkusov-mobileTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-6vkusov-mobileTests/Pods-6vkusov-mobileTests.debug.xcconfig"; sourceTree = "<group>"; };
 		2A23854ABBF62CAED3273434 /* Pods-6vkusov-mobileTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-6vkusov-mobileTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-6vkusov-mobileTests/Pods-6vkusov-mobileTests.release.xcconfig"; sourceTree = "<group>"; };
+		6002F7341E793B7A0016E047 /* Order.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Order.swift; sourceTree = "<group>"; };
 		6008D3DE1E640ADA00627F1B /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		6008D3DF1E640ADA00627F1B /* LicensiaViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LicensiaViewController.swift; sourceTree = "<group>"; };
 		6008D3E01E640ADA00627F1B /* RemmemberPasswordViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemmemberPasswordViewController.swift; sourceTree = "<group>"; };
 		601410A31E77C3CE001E3C6C /* RestaurantsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RestaurantsTableViewController.swift; sourceTree = "<group>"; };
+		601410B31E7809C3001E3C6C /* UserTabViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserTabViewController.swift; sourceTree = "<group>"; };
+		601410B61E782C13001E3C6C /* Suggest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Suggest.swift; sourceTree = "<group>"; };
+		601410B81E782D45001E3C6C /* SuggestTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SuggestTableViewCell.swift; sourceTree = "<group>"; };
+		601410BA1E783A3A001E3C6C /* OrderTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OrderTableViewCell.swift; sourceTree = "<group>"; };
+		601410BC1E783A8F001E3C6C /* BonusViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BonusViewController.swift; sourceTree = "<group>"; };
 		6018960E1E76905900E1439C /* Category.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Category.swift; sourceTree = "<group>"; };
 		601896111E76907D00E1439C /* CategoryTVCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CategoryTVCell.swift; sourceTree = "<group>"; };
 		6025D04A1E76ADD500D29D5B /* Restaurant.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Restaurant.swift; sourceTree = "<group>"; };
@@ -154,11 +166,23 @@
 			name = AuthControllers;
 			sourceTree = "<group>";
 		};
+		601410B51E78182A001E3C6C /* UserViewController */ = {
+			isa = PBXGroup;
+			children = (
+				609377411E694F7F00317803 /* ProfileViewController.swift */,
+				601410B31E7809C3001E3C6C /* UserTabViewController.swift */,
+				601410BC1E783A8F001E3C6C /* BonusViewController.swift */,
+			);
+			name = UserViewController;
+			sourceTree = "<group>";
+		};
 		6018960D1E76904000E1439C /* Models */ = {
 			isa = PBXGroup;
 			children = (
 				6025D04A1E76ADD500D29D5B /* Restaurant.swift */,
 				6018960E1E76905900E1439C /* Category.swift */,
+				601410B61E782C13001E3C6C /* Suggest.swift */,
+				6002F7341E793B7A0016E047 /* Order.swift */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -168,6 +192,8 @@
 			children = (
 				601896111E76907D00E1439C /* CategoryTVCell.swift */,
 				6025D04C1E76C02200D29D5B /* RestaurantTableViewCell.swift */,
+				601410B81E782D45001E3C6C /* SuggestTableViewCell.swift */,
+				601410BA1E783A3A001E3C6C /* OrderTableViewCell.swift */,
 			);
 			name = TableViewCells;
 			sourceTree = "<group>";
@@ -184,13 +210,13 @@
 		6087594F1E6026960015C23A /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
+				601410B51E78182A001E3C6C /* UserViewController */,
 				6008D3E41E640AEE00627F1B /* AuthControllers */,
 				6087594D1E6025EB0015C23A /* BaseViewController.swift */,
 				6025D0531E76DB6E00D29D5B /* RestaurantsViewController.swift */,
 				601410A31E77C3CE001E3C6C /* RestaurantsTableViewController.swift */,
 				60AE6ACB1E5DC102004A39F2 /* MainViewController.swift */,
 				60E0080E1E6708290015D620 /* CategoriesViewController.swift */,
-				609377411E694F7F00317803 /* ProfileViewController.swift */,
 			);
 			name = ViewControllers;
 			sourceTree = "<group>";
@@ -596,13 +622,17 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				601410B41E7809C3001E3C6C /* UserTabViewController.swift in Sources */,
 				6025D04B1E76ADD500D29D5B /* Restaurant.swift in Sources */,
 				60E008121E670B280015D620 /* LocalStorage.swift in Sources */,
 				60AE6ACC1E5DC102004A39F2 /* MainViewController.swift in Sources */,
 				60E0081C1E670D290015D620 /* STATUS.swift in Sources */,
 				6025D0521E76CADE00D29D5B /* TitleHeader.swift in Sources */,
+				6002F7351E793B7A0016E047 /* Order.swift in Sources */,
 				6087595C1E6062480015C23A /* JsonHelperLoad.swift in Sources */,
+				601410BD1E783A8F001E3C6C /* BonusViewController.swift in Sources */,
 				601410A41E77C3CE001E3C6C /* RestaurantsTableViewController.swift in Sources */,
+				601410B71E782C13001E3C6C /* Suggest.swift in Sources */,
 				60E0081E1E670D420015D620 /* Basket.swift in Sources */,
 				6087595F1E6063260015C23A /* LoadJson.swift in Sources */,
 				60AE6ACA1E5DC102004A39F2 /* AppDelegate.swift in Sources */,
@@ -612,7 +642,9 @@
 				6087595A1E60498B0015C23A /* Validator.swift in Sources */,
 				60E008191E670D040015D620 /* Registred.swift in Sources */,
 				601896121E76907D00E1439C /* CategoryTVCell.swift in Sources */,
+				601410BB1E783A3A001E3C6C /* OrderTableViewCell.swift in Sources */,
 				6087594E1E6025EB0015C23A /* BaseViewController.swift in Sources */,
+				601410B91E782D45001E3C6C /* SuggestTableViewCell.swift in Sources */,
 				6008D3E21E640ADA00627F1B /* LicensiaViewController.swift in Sources */,
 				60E0081A1E670D040015D620 /* General.swift in Sources */,
 				6008D3E11E640ADA00627F1B /* LoginViewController.swift in Sources */,
