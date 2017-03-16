@@ -7,6 +7,7 @@ target '6vkusov-mobile' do
 
   # Pods for 6vkusov-mobile
   pod 'SDWebImage'
+  pod 'SCLAlertView'
 
   target '6vkusov-mobileTests' do
     inherit! :search_paths

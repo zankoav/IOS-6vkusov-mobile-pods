@@ -73,6 +73,12 @@ class MainViewController: BaseViewController {
             self.navigationController?.pushViewController(profileViewController!, animated: true)
     }
     
+    @IBAction func promoViewControllerPressed(_ sender: Any) {
+        let viewController = self.storyboard?.instantiateViewController(withIdentifier: "PromoTabController") as! PromoTabController
+        self.navigationController?.pushViewController(viewController, animated: true)
+    }
+
+    
     
     public func loadComplete(){
         log(logMessage: "Complete Load")

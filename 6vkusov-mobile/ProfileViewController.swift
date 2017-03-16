@@ -16,26 +16,32 @@ class ProfileViewController: BaseViewController, UITableViewDelegate, UITableVie
     @IBOutlet weak var saggestsTableView: UITableView!
     
     private var seggests:[Suggest] = []
+    private var heightCell:CGFloat = 0
     
     private var userData = Singleton.currentUser().getUser()!.getProfile()
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.tabBarController?.title = "Профиль"
+    }
+
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        heightCell = UIScreen.main.bounds.height/3
         seggests = [
             Suggest(name: "ШЕФ-БУРГЕР",url: "/uploads/img/promo/58811668cd4df.png", slug: "osushi"),
             Suggest(name: "ШЕФ-БУРГЕР",url: "/uploads/img/promo/58811668cd4df.png", slug: "osushi"),
             Suggest(name: "ШЕФ-БУРГЕР",url: "/uploads/img/promo/58811668cd4df.png", slug: "osushi"),
             Suggest(name: "ШЕФ-БУРГЕР",url: "/uploads/img/promo/58811668cd4df.png", slug: "osushi")
         ]
-        UITabBar.appearance().tintColor = UIColor(netHex: 0xBE232D)
         initViews()
     }
 
     private func initViews(){
         
         bonusUser.layer.masksToBounds = true
-        bonusUser.layer.cornerRadius = bonusUser.bounds.height/2
+        bonusUser.layer.cornerRadius = 5
         
         imageUser.layer.masksToBounds = true
         imageUser.layer.cornerRadius = imageUser.bounds.width/2
@@ -64,7 +70,7 @@ class ProfileViewController: BaseViewController, UITableViewDelegate, UITableVie
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return UIScreen.main.bounds.height/4
+        return heightCell
     }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
