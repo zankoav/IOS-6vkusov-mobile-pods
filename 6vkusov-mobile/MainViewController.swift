@@ -100,5 +100,11 @@ class MainViewController: BaseViewController {
         present(logoutAlert, animated: true, completion: nil)
     }
     
+    @IBAction func favoritRestsPressed(_ sender: Any) {
+        let vc = self.storyboard?.instantiateViewController(withIdentifier: "RestaurantsViewController") as! RestaurantsViewController
+            vc.setType(slug: "pizza")
+            self.navigationController?.pushViewController(vc, animated: true)
+    }
+    
 }
 

@@ -1,18 +1,19 @@
 //
-//  SuggestTableViewCell.swift
+//  ProductFooterCell.swift
 //  6vkusov-mobile
 //
-//  Created by Alexandr Zanko on 3/14/17.
+//  Created by Alexandr Zanko on 3/20/17.
 //  Copyright © 2017 Alexandr Zanko. All rights reserved.
 //
 
 import UIKit
 
-class SuggestTableViewCell: UITableViewCell {
+class ProductFooterCell: UITableViewCell {
 
-    @IBOutlet weak var icon: UIImageView!
-    @IBOutlet weak var name: UILabel!
-
+    @IBOutlet weak var add: UIButton!
+    
+    var product :Product!
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
@@ -20,8 +21,15 @@ class SuggestTableViewCell: UITableViewCell {
 
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
-
         // Configure the view for the selected state
+    }
+    
+    
+    
+    
+    @IBAction func addPressed(_ sender: Any){
+        print("add product")
+        Singleton.currentUser().getUser()?.getBasket().addOrder(product: product)
     }
 
 }

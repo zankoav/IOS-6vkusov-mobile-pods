@@ -30,10 +30,10 @@ class ProfileViewController: BaseViewController, UITableViewDelegate, UITableVie
         super.viewDidLoad()
         heightCell = UIScreen.main.bounds.height/3
         seggests = [
-            Suggest(name: "ШЕФ-БУРГЕР",url: "/uploads/img/promo/58811668cd4df.png", slug: "osushi"),
-            Suggest(name: "ШЕФ-БУРГЕР",url: "/uploads/img/promo/58811668cd4df.png", slug: "osushi"),
-            Suggest(name: "ШЕФ-БУРГЕР",url: "/uploads/img/promo/58811668cd4df.png", slug: "osushi"),
-            Suggest(name: "ШЕФ-БУРГЕР",url: "/uploads/img/promo/58811668cd4df.png", slug: "osushi")
+            Suggest(name: "ШЕФ-БУРГЕР",url: "/uploads/img/promo/58811668cd4df.png", slug: "3-povara"),
+            Suggest(name: "ШЕФ-БУРГЕР",url: "/uploads/img/promo/58811668cd4df.png", slug: "3-povara"),
+            Suggest(name: "ШЕФ-БУРГЕР",url: "/uploads/img/promo/58811668cd4df.png", slug: "3-povara"),
+            Suggest(name: "ШЕФ-БУРГЕР",url: "/uploads/img/promo/58811668cd4df.png", slug: "3-povara")
         ]
         initViews()
     }
@@ -89,9 +89,13 @@ class ProfileViewController: BaseViewController, UITableViewDelegate, UITableVie
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let vc = self.storyboard?.instantiateViewController(withIdentifier: "RestaurantsViewController") as! RestaurantsViewController
-        vc.setType(slug: seggests[indexPath.row].slug)
-        self.navigationController?.pushViewController(vc, animated: true)
+        let vc = self.storyboard?.instantiateViewController(withIdentifier: "RestaurantTabController") as! RestaurantTabController
+        print(seggests[indexPath.row].slug)
+        
+        if let restaurant = Singleton.currentUser().getStore()!.getRestaurantBySlugName(slug:seggests[indexPath.row].slug) {
+            vc.restaurant = restaurant
+            self.navigationController?.pushViewController(vc, animated: true)
+        }
     }
     
     

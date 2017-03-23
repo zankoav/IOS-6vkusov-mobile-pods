@@ -15,6 +15,7 @@ class PromoTableViewCell: UITableViewCell {
     @IBOutlet weak var bonus: UILabel!
     @IBOutlet weak var button: UIButton!
     
+
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
@@ -32,7 +33,7 @@ class PromoTableViewCell: UITableViewCell {
     }
     
     @IBAction func buttonPressed(_ sender: Any) {
-        print(name.text ?? "")
+        print("add promo")
     }
 
 }

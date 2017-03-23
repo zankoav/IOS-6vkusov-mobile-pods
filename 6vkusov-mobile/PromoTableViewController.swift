@@ -13,52 +13,19 @@ class PromoTableViewController: UITableViewController {
     
     var array = [Promo]()
     let height = UIScreen.main.bounds.height/2
-    var button:UIBarButtonItem?
     var indexVC:Int!
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         var title = ["Еда","Техника","Подписки","Софт", "Игры"]
         self.tabBarController?.title = title[indexVC]
-        if indexVC == 0 {
-            print("indexVC")
-            self.tabBarController?.navigationItem.rightBarButtonItem = button
-        }
-    }
-    
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        //self.tabBarController?.navigationItem.rightBarButtonItem = nil
-    }
-    
-    func basketOpen(){
-        print("basketOpen")
     }
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let containView = UIView(frame: CGRect(x:0, y:0,width:70, height:40))
-        let label = UILabel(frame: CGRect(x:40, y:5, width:20, height:20))
-        label.text = "99"
-        label.textColor = UIColor.white
-        label.backgroundColor = UIColor(netHex: 0x8FB327)
-        label.layer.masksToBounds = true
-        label.font = UIFont.systemFont(ofSize: 9)
-        label.layer.cornerRadius = label.bounds.height/2
-        label.textAlignment = NSTextAlignment.center
-        containView.addSubview(label)
-        let imageButton = UIButton(frame: CGRect(x:0, y:5, width:70, height:30))
-        imageButton.addTarget(self, action: #selector(basketOpen), for: UIControlEvents.touchUpInside)
-        imageButton.setImage(UIImage(named: "shopping-cart"), for: UIControlState.normal)
-        imageButton.contentMode = UIViewContentMode.scaleAspectFill
-        containView.addSubview(imageButton)
-        containView.addSubview(label)
-        button = UIBarButtonItem(customView: containView)
-       // self.navigationItem.rightBarButtonItem = button
-        
-                indexVC = (self.tabBarController?.viewControllers?.index(of: self))!
+        indexVC = (self.tabBarController?.viewControllers?.index(of: self))!
         switch(indexVC) {
             case 0:
                 array = [

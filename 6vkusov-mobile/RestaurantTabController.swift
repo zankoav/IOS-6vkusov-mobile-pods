@@ -1,28 +1,30 @@
 //
-//  PromoTabController.swift
+//  RestaurantViewController.swift
 //  6vkusov-mobile
 //
-//  Created by Alexandr Zanko on 3/16/17.
+//  Created by Alexandr Zanko on 3/17/17.
 //  Copyright © 2017 Alexandr Zanko. All rights reserved.
 //
 
 import UIKit
 
-class PromoTabController: UITabBarController, BasketViewDelegate {
-    
-    
+class RestaurantTabController: UITabBarController, BasketViewDelegate {
+
     private var button:UIBarButtonItem?
     private var label:UILabel!
-
+    var restaurant:Restaurant!
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         Singleton.currentUser().getUser()?.getBasket().delegate = self
         label.text = "1"
     }
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        self.title = restaurant.name
+        
         let containView = UIView(frame: CGRect(x:0, y:0,width:70, height:40))
         label = UILabel(frame: CGRect(x:40, y:5, width:20, height:20))
         label.textColor = UIColor.white
@@ -40,8 +42,14 @@ class PromoTabController: UITabBarController, BasketViewDelegate {
         containView.addSubview(label)
         button = UIBarButtonItem(customView: containView)
         self.navigationItem.rightBarButtonItem = button
+        
+        
         UITabBar.appearance().tintColor = .white
         self.tabBar.barTintColor = UIColor(netHex: 0xBE232D)
+        self.tabBar.unselectedItemTintColor = UIColor(netHex: 0x691319)
+        let backItem = UIBarButtonItem()
+        backItem.title = ""
+        navigationItem.backBarButtonItem = backItem
     }
     
     func updateBasket(count: Int) {
@@ -52,8 +60,6 @@ class PromoTabController: UITabBarController, BasketViewDelegate {
         let basketTableViewController = self.storyboard?.instantiateViewController(withIdentifier: "BasketTableViewController")
         self.navigationController?.pushViewController(basketTableViewController!, animated: true)
     }
-    
-    
-    
+
 
 }

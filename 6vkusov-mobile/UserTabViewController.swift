@@ -14,6 +14,6 @@ class UserTabViewController: UITabBarController {
         super.viewDidLoad()
         UITabBar.appearance().tintColor = .white
         self.tabBar.barTintColor = UIColor(netHex: 0xBE232D)
-
+        self.tabBar.unselectedItemTintColor = UIColor(netHex: 0x691319)
     }
 }

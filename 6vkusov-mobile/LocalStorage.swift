@@ -15,13 +15,9 @@ public enum REST_URL: String {
     case SF_DOMAIN = "https://6vkusov.by"
     case SF_LOGIN = "https://6vkusov.by/api/login"
     case SF_REGISTRATION = "https://6vkusov.by/api/register"
-    
-//    case SF_RESTAURANT_MENU = "http://6vkusov:f91DCoC@6vkusov.by/api/restaurant_categories"
-//    case SF_RESTAURANT_COMMENTS = "http://6vkusov:f91DCoC@6vkusov.by/api/restaurant_comments"
-//    case SF_RESTAURANT_FOOD = "http://6vkusov:f91DCoC@6vkusov.by/api/food"
-//    case PROMOS = "http://zan.6vkusov.by/main/getPromos"
-//    case ORDER = "http://zan.6vkusov.by/main/setOrder"
-    
+    case SF_COMMENTS = "https://6vkusov.by/api/restaurant_comments"
+    case SF_RESTAURANT_MENU = "https://6vkusov.by/api/restaurant_categories"
+    case SF_RESTAURANT_FOOD = "https://6vkusov.by/api/food"
 }
 
 class LocalStorage: LoadJson{
@@ -172,9 +168,9 @@ class LocalStorage: LoadJson{
                         delivery_time = ""
                     }
                     let kitchens = rest["kitchens"] as! [String]
-                    var description = rest["description"] as? String
-                    if description == nil{
-                        description = ""
+                    var description = ""
+                    if let info = rest["info"] as? Dictionary<String,String> {
+                        description = info["description"]!
                     }
                     let logoImg = rest["logo"] as? String
                     var iconURL = ""
@@ -183,7 +179,7 @@ class LocalStorage: LoadJson{
                     }
                     
                     let comments = rest["comments"] as! Dictionary<String,Int>
-                    let restaurant = Restaurant(slug: slug, name: name, working_time: working_time, minimal_price: minimal_price, delivery_time: delivery_time!, kitchens: kitchens, description: description!, iconURL: iconURL, comments: comments)
+                    let restaurant = Restaurant(slug: slug, name: name, working_time: working_time, minimal_price: minimal_price, delivery_time: delivery_time!, kitchens: kitchens, description: description, iconURL: iconURL, comments: comments)
                     restaurants.append(restaurant)
                 }
             } catch let error as NSError {
@@ -191,5 +187,46 @@ class LocalStorage: LoadJson{
             }
         }
         return restaurants
+    }
+    
+    func getRestaurantBySlugName(slug:String) -> Restaurant?{
+        let str = getDataStorage(key: APP_RESTAURANTS)
+        if let data = str?.data(using: .utf8) {
+            do {
+                let allRestaurants = try JSONSerialization.jsonObject(with: data, options: []) as! Dictionary<String,AnyObject>
+                let img_path = allRestaurants["img_path"] as! String
+                let array = allRestaurants["restaurants"] as! [Dictionary<String,AnyObject>]
+                for rest in array {
+                    let slugRest = rest["slug"] as! String
+                    if slugRest != slug {
+                        continue
+                    }
+                    let name = rest["name"] as! String
+                    let working_time = rest["working_time"] as! String
+                    let minimal_price = rest["minimal_price"] as! Float
+                    var delivery_time = rest["delivery_time"] as? String
+                    if delivery_time == nil{
+                        delivery_time = ""
+                    }
+                    let kitchens = rest["kitchens"] as! [String]
+                    var description = ""
+                    if let info = rest["info"] as? Dictionary<String,String> {
+                        description = info["description"]!
+                    }
+                    let logoImg = rest["logo"] as? String
+                    var iconURL = ""
+                    if let logo = logoImg{
+                        iconURL = REST_URL.SF_DOMAIN.rawValue + img_path + "/" + logo
+                    }
+                    let comments = rest["comments"] as! Dictionary<String,Int>
+                    let restaurant = Restaurant(slug: slugRest, name: name, working_time: working_time, minimal_price: minimal_price, delivery_time: delivery_time!, kitchens: kitchens, description: description, iconURL: iconURL, comments: comments)
+                    
+                    return restaurant
+                }
+            } catch let error as NSError {
+                print(error)
+            }
+        }
+        return nil
     }
 }

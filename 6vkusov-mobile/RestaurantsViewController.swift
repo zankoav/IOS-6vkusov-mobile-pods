@@ -122,14 +122,15 @@ class RestaurantsViewController: BaseViewController, UITableViewDelegate, UITabl
         navigationItem.backBarButtonItem = backItem
         self.resultsController.tableView.delegate = self
         self.resultsController.tableView.dataSource = self
+        
         self.searchController = UISearchController(searchResultsController: self.resultsController)
+
         self.searchController.searchBar.placeholder = "Поиск ресторана"
         self.searchController.searchBar.setValue("Отмена", forKey: "cancelButtonText")
         self.searchController.searchResultsUpdater = self
         self.tableView.tableHeaderView = self.searchController.searchBar
         let cancelButtonAttributes: NSDictionary = [NSForegroundColorAttributeName: UIColor.white]
         UIBarButtonItem.appearance().setTitleTextAttributes(cancelButtonAttributes as? [String : AnyObject], for: UIControlState.normal)
-        
         newBtn.addTarget(self, action: #selector(filterChanged), for: UIControlEvents.touchUpInside)
         freeFoodBtn.addTarget(self, action: #selector(filterChanged), for: UIControlEvents.touchUpInside)
         promoBtn.addTarget(self, action: #selector(filterChanged), for: UIControlEvents.touchUpInside)
@@ -169,7 +170,7 @@ class RestaurantsViewController: BaseViewController, UITableViewDelegate, UITabl
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat
     {
-        return  UIScreen.main.bounds.height/4
+        return  UIScreen.main.bounds.height/3.5
     }
     
     func numberOfSections(in tableView: UITableView) -> Int
@@ -205,6 +206,18 @@ class RestaurantsViewController: BaseViewController, UITableViewDelegate, UITabl
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let restaurant = self.restaurants[indexPath.row]
-        print(restaurant.slug)
+        if self.searchController.isActive {
+            self.searchController.dismiss(animated: true) { () -> Void in
+                self.searchController.searchBar.text = ""
+                self.searchController.searchBar.showsCancelButton = false
+                let vc = self.storyboard?.instantiateViewController(withIdentifier: "RestaurantTabController") as! RestaurantTabController
+                vc.restaurant = restaurant
+                self.navigationController?.pushViewController(vc, animated: true)
+            }
+        }else{
+            let vc = self.storyboard?.instantiateViewController(withIdentifier: "RestaurantTabController") as! RestaurantTabController
+            vc.restaurant = restaurant
+            self.navigationController?.pushViewController(vc, animated: true)
+        }
     }
 }
