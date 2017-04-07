@@ -7,14 +7,15 @@
 //
 
 import UIKit
+import SCLAlertView
 
 class ProductsTableViewController: UITableViewController, BasketViewDelegate  {
 
     var titleCat: String!
     var restaurant: Restaurant!
     var products = [Product]()
-    private var isFreeFood = false
-    
+    var alert: SCLAlertView!
+    var isFreeFood: Bool!
     
     private var button:UIBarButtonItem?
     private var label:UILabel!
@@ -23,16 +24,16 @@ class ProductsTableViewController: UITableViewController, BasketViewDelegate  {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         Singleton.currentUser().getUser()?.getBasket().delegate = self
-        label.text = "1"
+        let count = Singleton.currentUser().getUser()?.getBasket().getTotalCount()
+        label.isHidden = count! > 0 ? false : true
+        label.text = "\(count!)"
         self.tableView.reloadData()
     }
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        isFreeFood = titleCat == "Еда за баллы" ? true : false
         self.title = titleCat
-        
         self.tableView.sectionHeaderHeight = UITableViewAutomaticDimension
         self.tableView.estimatedSectionHeaderHeight = width/2
         
@@ -59,12 +60,32 @@ class ProductsTableViewController: UITableViewController, BasketViewDelegate  {
     }
     
     func updateBasket(count: Int) {
+        label.isHidden = count > 0 ? false : true
         label.text = "\(count)"
     }
     
+    func showaAlert(product: Product, slug: String) {
+        let appearance = SCLAlertView.SCLAppearance(
+            kTitleFont: UIFont(name: "HelveticaNeue", size: 20)!,
+            kTextFont: UIFont(name: "HelveticaNeue", size: 14)!,
+            kButtonFont: UIFont(name: "HelveticaNeue-Bold", size: 14)!,
+            showCloseButton: true,
+            hideWhenBackgroundViewIsTapped:true
+        )
+        
+        alert = SCLAlertView(appearance: appearance)
+        alert.addButton("Да"){
+            Singleton.currentUser().getUser()?.getBasket().resetBasket(product: product, slug: slug)
+        }
+        alert.showWarning("Внимание!", subTitle: "В Вашей корзине присутствуют товары из другого ресторана. Очистить корзину ?")
+        
+    }
+
     func basketOpen(){
-        let basketTableViewController = self.storyboard?.instantiateViewController(withIdentifier: "BasketTableViewController")
-        self.navigationController?.pushViewController(basketTableViewController!, animated: true)
+        if (Singleton.currentUser().getUser()?.getBasket().productItems.count)! > 0{
+            let basketViewController = self.storyboard?.instantiateViewController(withIdentifier: "BasketViewCntroller")
+            self.navigationController?.pushViewController(basketViewController!, animated: true)
+        }
     }
 
     // MARK: - Table view data source
@@ -75,7 +96,15 @@ class ProductsTableViewController: UITableViewController, BasketViewDelegate  {
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        return products[section].variants.count
+        if isFreeFood {
+            return 0
+        }else{
+            return products[section].variants.count
+        }
+    }
+    
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 60.0
     }
 
     
@@ -83,6 +112,7 @@ class ProductsTableViewController: UITableViewController, BasketViewDelegate  {
         let cell = tableView.dequeueReusableCell(withIdentifier: "product_cell") as! VariantTableViewCell
         let variant = products[indexPath.section].variants[indexPath.row]
         cell.variant = products[indexPath.section].variants[indexPath.row]
+        cell.vc = self
         
         cell.price.text = variant.count == 0 ? "\(variant.price)" : "\(Float(variant.count)*variant.price)"
         if let size = variant.size {
@@ -98,7 +128,7 @@ class ProductsTableViewController: UITableViewController, BasketViewDelegate  {
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let cell = tableView.dequeueReusableCell(withIdentifier: "header") as! ProductHeaderViewCell
         cell.name.text = products[section].name
-        cell.desc.text = products[section].descriptionProduct
+        cell.desc.text = products[section].description
         cell.icon.sd_setImage(with: URL(string: products[section].icon), placeholderImage: UIImage(named:"avatar"))
         return cell.contentView
     }
@@ -107,16 +137,21 @@ class ProductsTableViewController: UITableViewController, BasketViewDelegate  {
         
         let view = FooterProductView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 60))
             view.product = products[section]
-        
-//        let cell = tableView.dequeueReusableCell(withIdentifier: "footer") as! ProductFooterCell
-//        cell.add.layer.cornerRadius = 5
-//        cell.product = products[section]
-//        return cell.contentView
-//        
+            view.slug = restaurant.slug
+            view.isFreeFood = isFreeFood
+            if isFreeFood {
+                view.points.text = "\(products[section].points!) баллов"
+                if Singleton.currentUser().getUser()?.getStatus() == STATUS.GENERAL {
+                    view.button.backgroundColor =  UIColor.lightGray
+                    view.button.setTitle("зарегистрируйтесь", for: UIControlState.normal)
+                }
+            }
+            view.points.isHidden = !self.isFreeFood
         return view
     }
     
     override func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
         return 60.0
     }
+    
 }

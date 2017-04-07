@@ -1,14 +1,14 @@
 //
-//  Product.swift
-//  Six flavors
+//  ProductItem.swift
+//  6vkusov-mobile
 //
-//  Created by Alexandr Zanko on 20/10/16.
-//  Copyright © 2016 Netbix. All rights reserved.
+//  Created by Alexandr Zanko on 4/6/17.
+//  Copyright © 2017 Alexandr Zanko. All rights reserved.
 //
 
 import Foundation
 
-class Product {
+class ProductItem {
     
     private var _id: Int
     private var _name: String
@@ -16,7 +16,25 @@ class Product {
     private var _description: String
     private var _points: Int?
     private var _category: Dictionary<String,String>
-    private var _variants:[Variant]
+    private var _variant:Variant
+    private var _count: Int
+    
+    
+    var count:Int{
+        return _count
+    }
+    
+    func addCount(){
+        _count += 1
+    }
+    
+    func addCountTo(count:Int){
+        _count += count
+    }
+    
+    func minusCount(){
+        _count -= 1
+    }
     
     var id: Int{
         return _id
@@ -34,8 +52,8 @@ class Product {
         return _category
     }
     
-    var variants: [Variant]{
-        return _variants
+    var variant: Variant{
+        return _variant
     }
     
     var icon: String {
@@ -45,16 +63,18 @@ class Product {
     var description: String?{
         return _description
     }
-
     
-    init(id :Int, name: String, icon: String, description: String, category: Dictionary<String,String>,  variants:[Variant], points: Int?){
+    
+    init(id :Int, name: String, icon: String, description: String, category: Dictionary<String,String>,  variant:Variant, points: Int?){
         _id = id
         _name = name
         _points = points
         _icon = icon
         _description = description
         _category = category
-        _variants = variants
+        _variant = variant
+        _count = variant.count
     }
+
     
 }

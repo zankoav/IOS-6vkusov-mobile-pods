@@ -20,7 +20,7 @@ class RestaurantInfoViewController: BaseViewController {
         super.viewDidLoad()
         let tabController = self.tabBarController as! RestaurantTabController
         restaurentInfo.isScrollEnabled = false
-        restaurentInfo.text = tabController.restaurant.description
+        restaurentInfo.text = tabController.restaurant.info.descriptionInfo
         // Do any additional setup after loading the view.
     }
 

@@ -29,7 +29,7 @@ class ProductFooterCell: UITableViewCell {
     
     @IBAction func addPressed(_ sender: Any){
         print("add product")
-        Singleton.currentUser().getUser()?.getBasket().addOrder(product: product)
+        //Singleton.currentUser().getUser()?.getBasket().addProductFromRestaurantOrder(product: product, slug: slug)
     }
 
 }

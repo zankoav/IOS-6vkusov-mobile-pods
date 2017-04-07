@@ -47,7 +47,8 @@ class RestaurantsViewController: BaseViewController, UITableViewDelegate, UITabl
         let backItem = UIBarButtonItem()
         backItem.title = ""
         navigationItem.backBarButtonItem = backItem
-        restaurants = Singleton.currentUser().getStore()!.getAllRestaurants()
+        print(slug)
+        restaurants = Singleton.currentUser().getStore()!.getRestaurants(slug: slug)
         fullRestaurants = restaurants
         initViews()
     }
@@ -188,13 +189,11 @@ class RestaurantsViewController: BaseViewController, UITableViewDelegate, UITabl
         let cell = tableView.dequeueReusableCell(withIdentifier: "restaurant_cell", for: indexPath) as! RestaurantTableViewCell
         let restaurant = tableView == self.tableView ? restaurants[indexPath.row] : restaurantsFiltred[indexPath.row]
         cell.name.text = restaurant.name
-        cell.kichenType.text = restaurant.getKitchens()
+        cell.kichenType.text = restaurant.kitchens
         cell.deliveryPrice.text = "\(restaurant.minimal_price) руб"
         cell.deliveryTime.text = "\(restaurant.delivery_time) мин"
-        let likes = restaurant.comments["like"]!
-        let dislikes = restaurant.comments["total"]! - likes
-        cell.likeCounts.text = "\(likes)"
-        cell.dislikesCounts.text = "\(dislikes)"
+        cell.likeCounts.text = "\(restaurant.comments["likes"]!)"
+        cell.dislikesCounts.text = "\(restaurant.comments["dislikes"]!)"
         cell.icon.sd_setImage(with: URL(string: restaurant.iconURL), placeholderImage: UIImage(named:"checkBoxOn"))
         return cell
     }

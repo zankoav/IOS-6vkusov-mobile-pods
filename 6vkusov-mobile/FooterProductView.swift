@@ -13,7 +13,12 @@ import UIKit
     var view: UIView!
     
     @IBOutlet weak var button: UIButton!
+    @IBOutlet weak var points: UILabel!
+    
+    var isFreeFood:Bool!
+
     var product :Product!
+    var slug :String!
     
     override init(frame: CGRect)
     {
@@ -27,8 +32,14 @@ import UIKit
     }
     
     @IBAction func productAdd(_ sender: Any) {
-        print("add product")
-        Singleton.currentUser().getUser()?.getBasket().addOrder(product: product)
+        if isFreeFood {
+            if Singleton.currentUser().getUser()?.getStatus() == STATUS.REGISTRED {
+                print("add to basket")
+            }
+        }else{
+            Singleton.currentUser().getUser()?.getBasket().addProductFromRestaurantOrder(product: product, slug: slug)
+
+        }
     }
     private func commonInit()
     {

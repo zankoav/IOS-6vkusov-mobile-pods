@@ -47,9 +47,12 @@ class ProfileViewController: BaseViewController, UITableViewDelegate, UITableVie
         imageUser.layer.cornerRadius = imageUser.bounds.width/2
         
         let firstName = userData?["firstName"] as! String
-        let lastName = userData?["lastName"] as! String
-        nameUser.text = firstName + " " + lastName
-        
+        if let lastName = userData?["lastName"] as? String {
+            nameUser.text = firstName + " " + lastName
+        }else{
+            nameUser.text = firstName
+        }
+                
         let points = userData?["points"] as! Int
         bonusUser.text = "\(points) баллов    "
         

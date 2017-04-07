@@ -11,7 +11,7 @@ import SDWebImage
 
 class RestaurantMainViewController: BaseViewController, UITableViewDelegate, UITableViewDataSource, LoadJson {
 
-    var menus = [String]()
+    var menus = [Dictionary<String,String>]()
     var products = [Product]()
     var restaurant: Restaurant!
     
@@ -23,8 +23,8 @@ class RestaurantMainViewController: BaseViewController, UITableViewDelegate, UIT
         widthScreen = UIScreen.main.bounds.width
         let tabController = self.tabBarController as! RestaurantTabController
         restaurant = tabController.restaurant
-        JsonHelperLoad(url: REST_URL.SF_RESTAURANT_MENU.rawValue, params: ["slug":restaurant.slug], act: self, sessionName: nil).startSession()
-        JsonHelperLoad(url: REST_URL.SF_RESTAURANT_FOOD.rawValue, params: ["slug":restaurant.slug], act: self, sessionName: "food").startSession()
+        
+        JsonHelperLoad(url: REST_URL.SF_RESTAURANT_FOOD.rawValue, params: ["key":REST_URL.KEY.rawValue as AnyObject, "slug":restaurant.slug as AnyObject], act: self, sessionName: "food").startSession()
     }
 
     override func didReceiveMemoryWarning() {
@@ -68,13 +68,13 @@ class RestaurantMainViewController: BaseViewController, UITableViewDelegate, UIT
             view.favorite.uncheckedImage = UIImage(named:"heart")!
             view.favorite.setImage(UIImage(named:"heart"), for: .normal)
             view.timeWork.text = restaurant.working_time
-            let likes = restaurant.comments["like"]!
-            let dislikes = restaurant.comments["total"]! - likes
+            let likes = restaurant.comments["likes"]!
+            let dislikes = restaurant.comments["dislikes"]!
             view.likeCount.text = "\(likes)"
             view.dislikeCount.text = "\(dislikes)"
             view.icon.sd_setImage(with: URL(string:restaurant.iconURL), placeholderImage: UIImage(named:"user"))
             view.name.text = restaurant.name
-            view.kitchens.text = restaurant.kitchens.joined(separator: ", ")
+            view.kitchens.text = restaurant.kitchens
             view.minPrice.text = "\(restaurant.minimal_price) руб."
             view.deliveryTime.text = restaurant.delivery_time + " мин."
             return view
@@ -86,36 +86,37 @@ class RestaurantMainViewController: BaseViewController, UITableViewDelegate, UIT
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell_menu")
-        cell?.textLabel?.text = menus[indexPath.row]
+        cell?.textLabel?.text = menus[indexPath.row]["name"]
         return cell!
     }
     
     func loadComplete(obj: Dictionary<String, AnyObject>?, sessionName: String?) {
-        if sessionName == "food" {
-            self.products = getAllProducts(obj: obj)
-        }else{
-            if let array = obj?["categories"] as? [String] {
-                self.menus = array
+        
+        if let object = obj {
+            self.products = getProducts(obj: object)
+            if products.count > 0 {
+                self.menus = getMenu(products: self.products)
             }
-        }
-        if self.menus.count > 0 && self.products.count > 0 {
-            self.tableView.reloadData()
+            if self.menus.count > 0 && self.products.count > 0 {
+                self.tableView.reloadData()
+            }
         }
     }
     
-    func getAllProducts (obj: Dictionary<String, AnyObject>?) -> [Product]{
+    private func getProducts(obj: Dictionary<String, AnyObject>) -> [Product]{
         var prods = [Product]()
-        if let array = obj?["food"] as? [Dictionary<String,AnyObject>] {
+        if let array = obj["food"] as? [Dictionary<String,AnyObject>] {
+            let img_path = "\(REST_URL.SF_DOMAIN.rawValue)/\(obj["img_path"] as! String)/"
             for ar in array {
-                var img_path = "\(REST_URL.SF_DOMAIN.rawValue)/\(obj?["img_path"] as! String)/"
                 let id = ar["id"] as! Int
                 let name = ar["name"] as! String
-                let descrip = ar["description"] as? String ?? ""
+                let points  = ar["points"] as? Int
+                let description = ar["description"] as? String ?? ""
+                var imageUrl = img_path
                 if let image = ar["image"] as? String {
-                    img_path += image
+                    imageUrl += image
                 }
-                let category = ar["category"] as! String
-                
+                let category = ar["category"] as! Dictionary<String,String>
                 var variants = [Variant]()
                 if let vars = ar["variants"] as? [Dictionary<String,AnyObject>] {
                     for vs in vars {
@@ -126,29 +127,65 @@ class RestaurantMainViewController: BaseViewController, UITableViewDelegate, UIT
                         variants.append(Variant(id: id, price: price, size: size, weigth: weigth))
                     }
                 }
-                let product = Product(id: id, name: name, icon: img_path, description: descrip, category:category, variants: variants)
+                let product = Product(id: id, name: name, icon: imageUrl, description: description, category:category, variants: variants, points:points)
                 
                 prods.append(product)
             }
         }
+
         return prods
     }
     
+    private func getMenu(products:[Product]) -> [Dictionary<String,String>]{
+        var menu = [Dictionary<String,String>]()
+        var array = [String]()
+        let points = ["slug":"free_food","name":"Еда за баллы"]
+        var isFreeFoodExists = false
+        for product in products {
+            if product.points != nil {
+                isFreeFoodExists = true
+            }
+            let categorySlug = product.category["slug"]!
+            if !array.contains(categorySlug){
+                array.append(categorySlug)
+                menu.append(product.category)
+            }
+        }
+        if isFreeFoodExists {
+            menu.insert(points, at: 0)
+        }
+        return menu
+    }
     
 
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let vc = self.storyboard?.instantiateViewController(withIdentifier: "ProductsTableViewController") as! ProductsTableViewController
         vc.restaurant = restaurant
-        vc.products = getProdsByCat(name: menus[indexPath.row])
-        vc.titleCat = menus[indexPath.row]
-        self.navigationController?.pushViewController(vc, animated: true)
+        
+        if let slug = menus[indexPath.row]["slug"] {
+            vc.products = slug == "free_food" ? getFreeFood() : getProdsByCat(slug: slug)
+            vc.isFreeFood = slug == "free_food"
+            vc.titleCat = menus[indexPath.row]["name"]
+            self.navigationController?.pushViewController(vc, animated: true)
+        }
+        
     }
     
-    func getProdsByCat(name: String) ->[Product]{
+    private func getProdsByCat(slug: String) ->[Product]{
         var prods = [Product]()
         for pr in self.products {
-            if pr.category == name {
+            if pr.category["slug"] == slug {
+                prods.append(pr)
+            }
+        }
+        return prods
+    }
+    
+    private func getFreeFood() ->[Product]{
+        var prods = [Product]()
+        for pr in self.products {
+            if pr.points != nil {
                 prods.append(pr)
             }
         }

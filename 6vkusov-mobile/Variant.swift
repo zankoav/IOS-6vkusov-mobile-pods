@@ -15,7 +15,7 @@ class Variant {
     private var _price: Float
     private var _size: String?
     private var _weigth: String?
-    private var _count = 0
+    private var _count = 1
     
     var id : Int {
         return _id

@@ -150,13 +150,14 @@ class RegistrationViewController: BaseViewController, UITextFieldDelegate, LoadJ
     }
     
     private func sendHashToTheServer(email:String,password:String,name:String,promo:String,newsBtn:Int){
-        var dict = Dictionary<String,String>()
-        dict["name"]  = name
-        dict["email"] = email
-        dict["password"]  = password
-        dict["news"]  = String(newsBtn)
+        var dict = Dictionary<String,AnyObject>()
+        dict["key"]  = REST_URL.KEY.rawValue as AnyObject
+        dict["email"] = email as AnyObject
+        dict["password"]  = password as AnyObject
+        dict["name"]  = name as AnyObject
+        dict["news"]  = String(newsBtn) as AnyObject
         if promo != "" {
-            dict["promo"]  = promo
+            dict["promo"]  = promo as AnyObject
         }
         JsonHelperLoad(url: REST_URL.SF_REGISTRATION.rawValue, params: dict, act: self, sessionName: "registration").startSession()
     }
@@ -164,8 +165,8 @@ class RegistrationViewController: BaseViewController, UITextFieldDelegate, LoadJ
     func loadComplete(obj: Dictionary<String, AnyObject>?, sessionName: String?) {
         if let response = obj {
             if (sessionName == "registration"){
-                let code = response["status"] as! Int
-                if code == 1 {
+                let status = response["status"] as! String
+                if status == "successful" {
                     let vc = self.navigationController?.viewControllers[1] as! LoginViewController
                     vc.message.text = "Вы успешно зарегистрированы, Вам на почту отправлена ссылка для активации"
                     self.regBtn.isEnabled = true

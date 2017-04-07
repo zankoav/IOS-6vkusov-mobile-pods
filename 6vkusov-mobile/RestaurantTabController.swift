@@ -17,7 +17,13 @@ class RestaurantTabController: UITabBarController, BasketViewDelegate {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         Singleton.currentUser().getUser()?.getBasket().delegate = self
-        label.text = "1"
+        let count = Singleton.currentUser().getUser()?.getBasket().getTotalCount()
+        label.isHidden = count! > 0 ? false : true
+        label.text = "\(count!)"
+    }
+    
+    func showaAlert(product: Product, slug: String) {
+        
     }
     
     override func viewDidLoad() {
@@ -57,9 +63,10 @@ class RestaurantTabController: UITabBarController, BasketViewDelegate {
     }
     
     func basketOpen(){
-        let basketTableViewController = self.storyboard?.instantiateViewController(withIdentifier: "BasketTableViewController")
-        self.navigationController?.pushViewController(basketTableViewController!, animated: true)
+        if (Singleton.currentUser().getUser()?.getBasket().productItems.count)! > 0{
+            let basketViewController = self.storyboard?.instantiateViewController(withIdentifier: "BasketViewCntroller")
+            self.navigationController?.pushViewController(basketViewController!, animated: true)
+        }
     }
-
 
 }

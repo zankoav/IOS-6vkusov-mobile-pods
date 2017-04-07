@@ -10,7 +10,6 @@ import UIKit
 
 class PromoTabController: UITabBarController, BasketViewDelegate {
     
-    
     private var button:UIBarButtonItem?
     private var label:UILabel!
 
@@ -49,11 +48,14 @@ class PromoTabController: UITabBarController, BasketViewDelegate {
     }
     
     func basketOpen(){
-        let basketTableViewController = self.storyboard?.instantiateViewController(withIdentifier: "BasketTableViewController")
-        self.navigationController?.pushViewController(basketTableViewController!, animated: true)
+        if (Singleton.currentUser().getUser()?.getBasket().productItems.count)! > 0{
+            let basketViewController = self.storyboard?.instantiateViewController(withIdentifier: "BasketViewCntroller")
+            self.navigationController?.pushViewController(basketViewController!, animated: true)
+        }
     }
-    
-    
-    
+
+    func showaAlert(product: Product, slug: String) {
+        
+    }
 
 }

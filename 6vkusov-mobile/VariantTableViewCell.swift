@@ -16,7 +16,7 @@ class VariantTableViewCell: UITableViewCell {
     @IBOutlet weak var add: UIButton!
     @IBOutlet weak var minus: UIButton!
     
-    
+    var vc: ProductsTableViewController!
     var variant: Variant!
     
     override func awakeFromNib() {
@@ -32,15 +32,16 @@ class VariantTableViewCell: UITableViewCell {
 
     @IBAction func buttonAdded(_ sender: Any) {
         variant.addCount()
-        price.text = "\(Float(variant.count)*variant.price)"
         count.text = "\(variant.count)"
+        price.text = "\(Float(variant.count) * variant.price)"
     }
     
     @IBAction func minusPressed(_ sender: Any) {
-        variant.minusCount()
-        price.text = "\(Float(variant.count)*variant.price)"
-        count.text = "\(variant.count)"
-        
+        if variant.count > 0 {
+            variant.minusCount()
+            count.text = "\(variant.count)"
+            price.text = "\(Float(variant.count) * variant.price)"
+        }
     }
     
 }

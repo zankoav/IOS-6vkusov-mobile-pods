@@ -67,10 +67,10 @@ class LoginViewController: BaseViewController, UITextFieldDelegate, LoadJson {
     func loadComplete(obj: Dictionary<String, AnyObject>?, sessionName: String?) {
         if let response = obj {
             if (sessionName == "login"){
-                let code = response["code"] as! Int
-                if code == 1 {
+                let status = response["status"] as! String
+                if status == "successful" {
                     do {
-                        let data = try JSONSerialization.data(withJSONObject: response, options: [])
+                        let data = try JSONSerialization.data(withJSONObject: response["message"] as! Dictionary<String, AnyObject> , options: [])
                         let json = String(data: data, encoding: .utf8)
                         let store = Singleton.currentUser().getStore()
                         store?.setStringValueStorage(key: (store?.APP_PROFILE)!, value: json!)
@@ -131,8 +131,8 @@ class LoginViewController: BaseViewController, UITextFieldDelegate, LoadJson {
     }
     
     private func sendHashToTheServer(email:String,password:String){
-        let dict = ["email":email, "password":password]
-        JsonHelperLoad(url: REST_URL.SF_LOGIN.rawValue, params: dict, act: self, sessionName: "login").startSession()
+        let dict = ["key":REST_URL.KEY.rawValue,"email":email, "password":password]
+        JsonHelperLoad(url: REST_URL.SF_LOGIN.rawValue, params: dict as Dictionary<String, AnyObject>, act: self, sessionName: "login").startSession()
     }
     
     @IBAction func vkPressed(_ sender: Any) {
