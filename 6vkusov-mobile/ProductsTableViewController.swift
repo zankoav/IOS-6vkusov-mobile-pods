@@ -9,7 +9,7 @@
 import UIKit
 import SCLAlertView
 
-class ProductsTableViewController: UITableViewController, BasketViewDelegate  {
+class ProductsTableViewController: UITableViewController, BasketViewDelegate, ReloadFreeFoodTableView  {
 
     var titleCat: String!
     var restaurant: Restaurant!
@@ -23,13 +23,14 @@ class ProductsTableViewController: UITableViewController, BasketViewDelegate  {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        Singleton.currentUser().getUser()?.getBasket().initBasketFormServerForRegisterUser()
         Singleton.currentUser().getUser()?.getBasket().delegate = self
+        Singleton.currentUser().getUser()?.getBasket().delegateReloadData = self
         let count = Singleton.currentUser().getUser()?.getBasket().getTotalCount()
         label.isHidden = count! > 0 ? false : true
         label.text = "\(count!)"
         self.tableView.reloadData()
     }
-    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -59,6 +60,10 @@ class ProductsTableViewController: UITableViewController, BasketViewDelegate  {
         navigationItem.backBarButtonItem = backItem
     }
     
+    func reloadTableView() {
+        self.tableView.reloadData()
+    }
+    
     func updateBasket(count: Int) {
         label.isHidden = count > 0 ? false : true
         label.text = "\(count)"
@@ -77,7 +82,7 @@ class ProductsTableViewController: UITableViewController, BasketViewDelegate  {
         alert.addButton("Да"){
             Singleton.currentUser().getUser()?.getBasket().resetBasket(product: product, slug: slug)
         }
-        alert.showWarning("Внимание!", subTitle: "В Вашей корзине присутствуют товары из другого ресторана. Очистить корзину ?")
+        alert.showWarning("Внимание!",subTitle: "В Вашей корзине присутствуют товары из другого ресторана. Очистить корзину ?", closeButtonTitle:"Отмена")
         
     }
 
@@ -115,12 +120,15 @@ class ProductsTableViewController: UITableViewController, BasketViewDelegate  {
         cell.vc = self
         
         cell.price.text = variant.count == 0 ? "\(variant.price)" : "\(Float(variant.count)*variant.price)"
+        
+        var desc = ""
         if let size = variant.size {
-            cell.desc.text = size
+            desc = size
         }
         if let width = variant.weigth {
-            cell.desc.text = width
+            desc += " \(width)"
         }
+        cell.desc.text = desc
         cell.count.text = "\(variant.count)"
         return cell
     }
@@ -143,7 +151,12 @@ class ProductsTableViewController: UITableViewController, BasketViewDelegate  {
                 view.points.text = "\(products[section].points!) баллов"
                 if Singleton.currentUser().getUser()?.getStatus() == STATUS.GENERAL {
                     view.button.backgroundColor =  UIColor.lightGray
-                    view.button.setTitle("зарегистрируйтесь", for: UIControlState.normal)
+                    view.button.setTitle("Зарегистрируйтесь", for: UIControlState.normal)
+                }else{
+                    if (Singleton.currentUser().getUser()?.getBasket().isFreeFoodExist)!  {
+                        view.button.backgroundColor =  UIColor.lightGray
+                        view.button.setTitle("Продукт в корзине", for: UIControlState.normal)
+                    }
                 }
             }
             view.points.isHidden = !self.isFreeFood

@@ -17,9 +17,12 @@ class RestaurantTabController: UITabBarController, BasketViewDelegate {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         Singleton.currentUser().getUser()?.getBasket().delegate = self
+        Singleton.currentUser().getUser()?.getBasket().delegateReloadData = nil
+
         let count = Singleton.currentUser().getUser()?.getBasket().getTotalCount()
         label.isHidden = count! > 0 ? false : true
         label.text = "\(count!)"
+        Singleton.currentUser().getUser()?.getBasket().initBasketFormServerForRegisterUser()
     }
     
     func showaAlert(product: Product, slug: String) {
@@ -28,9 +31,7 @@ class RestaurantTabController: UITabBarController, BasketViewDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         self.title = restaurant.name
-        
         let containView = UIView(frame: CGRect(x:0, y:0,width:70, height:40))
         label = UILabel(frame: CGRect(x:40, y:5, width:20, height:20))
         label.textColor = UIColor.white
@@ -59,7 +60,9 @@ class RestaurantTabController: UITabBarController, BasketViewDelegate {
     }
     
     func updateBasket(count: Int) {
-        label.text = "\(count)"
+        let count = Singleton.currentUser().getUser()?.getBasket().getTotalCount()
+        label.isHidden = count! > 0 ? false : true
+        label.text = "\(count!)"
     }
     
     func basketOpen(){

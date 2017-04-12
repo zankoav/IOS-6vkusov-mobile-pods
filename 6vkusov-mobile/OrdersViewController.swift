@@ -8,12 +8,15 @@
 
 import UIKit
 
-class OrdersViewController: BaseViewController, UITableViewDelegate, UITableViewDataSource {
+class OrdersViewController: BaseViewController, UITableViewDelegate, UITableViewDataSource, LoadJson {
 
     
+    @IBOutlet weak var tableView: UITableView!
     
     private var orders:[Order] = []
     private var userData = Singleton.currentUser().getUser()!.getProfile()
+    
+    
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -22,17 +25,7 @@ class OrdersViewController: BaseViewController, UITableViewDelegate, UITableView
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        
-        orders = [
-            Order(status: ORDER_STATUS.PROGRESSING, created: 1470075992, restaurantSlug: "primecafe", restaurantName: "Prime cafe", restaurantUrlIcon: "\(REST_URL.SF_DOMAIN.rawValue)/uploads/img/restaurants/58c674ab3755f.png", products: [["name":"Пицца", "count": 1], ["name":"Кола 1 л.", "count": 2], ["name":"Бургер", "count": 2]]),
-            Order(status: ORDER_STATUS.READY, created: 1470060000, restaurantSlug: "gruzin.by", restaurantName: "Грузин.by", restaurantUrlIcon: "\(REST_URL.SF_DOMAIN.rawValue)/uploads/img/restaurants/58c674ab3755f.png", products: [["name":"Суши", "count": 8], ["name":"Кола 1 л.", "count": 2], ["name":"Суши", "count": 32]]),
-            Order(status: ORDER_STATUS.ABORT, created: 1460050000, restaurantSlug: "primecafe", restaurantName: "Prime cafe", restaurantUrlIcon: "\(REST_URL.SF_DOMAIN.rawValue)/uploads/img/restaurants/58c674ab3755f.png", products: [["name":"Роллы", "count": 16], ["name":"Шашлык", "count": 1], ["name":"Стейк", "count": 2]]),
-            Order(status: ORDER_STATUS.READY, created: 1450020000, restaurantSlug: "gruzin.by", restaurantName: "Грузин.by", restaurantUrlIcon: "\(REST_URL.SF_DOMAIN.rawValue)/uploads/img/restaurants/58c674ab3755f.png", products: [["name":"Пицца", "count": 5], ["name":"Кола 2 л.", "count": 1], ["name":"Суши", "count": 8]]),
-            Order(status: ORDER_STATUS.READY, created: 1440010000, restaurantSlug: "primecafe", restaurantName: "Prime cafe", restaurantUrlIcon: "\(REST_URL.SF_DOMAIN.rawValue)/uploads/img/restaurants/58c674ab3755f.png", products: [["name":"Паста", "count": 1], ["name":"Фанта 0.5 л.", "count": 1], ["name":"Бургер", "count": 2]]),
-            Order(status: ORDER_STATUS.ABORT, created: 1430000000, restaurantSlug: "gruzin.by", restaurantName: "Грузин.by", restaurantUrlIcon: "\(REST_URL.SF_DOMAIN.rawValue)/uploads/img/restaurants/58c674ab3755f.png", products: [["name":"Стейк", "count": 3], ["name":"Суп", "count": 1], ["name":"Пицца", "count": 1]])
-        ]
-        // Do any additional setup after loading the view.
+        JsonHelperLoad.init(url: REST_URL.SF_ORDERS.rawValue, params: ["key":REST_URL.KEY.rawValue as AnyObject,"session":Singleton.currentUser().getUser()?.getProfile()!["session"] as AnyObject], act: self, sessionName: nil).startSession()
     }
 
     override func didReceiveMemoryWarning() {
@@ -40,6 +33,33 @@ class OrdersViewController: BaseViewController, UITableViewDelegate, UITableView
         // Dispose of any resources that can be recreated.
     }
     
+    func loadComplete(obj: Dictionary<String, AnyObject>?, sessionName: String?) {
+        if let request = obj {
+            if let status = request["status"] as? String{
+                if status == "successful"{
+                    let image_path = REST_URL.SF_DOMAIN.rawValue + (request["image_path"] as! String)
+                    self.orders = [Order]()
+                    let ordersArray = request["orders"] as! [Dictionary<String,AnyObject>]
+                    for order in ordersArray {
+                        let rest_slug = order["restaurant_slug"] as! String
+                        let rest_name = order["restaurant_name"] as! String
+                        let rest_icon = order["restaurant_icon"] as? String
+                        let total_price = order["total_price"] as! Float
+                        let id = order["id"] as! Int
+
+                        let comments_exists = order["comment_exists"] as! Bool
+                        let created = order["created"] as! UnixTime
+                        let foodArray = order["food"] as! [Dictionary<String,Any>]
+                        
+                        let orederObject = Order(status: comments_exists ? ORDER_STATUS.COMMENTS_OK : ORDER_STATUS.COMMENTS_NO , created: created, restaurantSlug: rest_slug, restaurantName: rest_name, restaurantUrlIcon: image_path + (rest_icon == nil ? "" : rest_icon!), products: foodArray, totalPrice: total_price,id: id)
+                        self.orders.append(orederObject)
+                    }
+                    self.tableView.reloadData()
+                }
+            }
+        }
+
+    }
     
     func numberOfSections(in tableView: UITableView) -> Int {
         return orders.count
@@ -56,19 +76,13 @@ class OrdersViewController: BaseViewController, UITableViewDelegate, UITableView
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let sectionView = TitleHeader(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height/5))
         sectionView.index = section%2 == 0
-        sectionView.slug = orders[section].restaurantSlug
-        
+        sectionView.order = orders[section]
+        sectionView.totalPrice.text = "\(orders[section].totalPrice)"
         sectionView.dateOrder.text = orders[section].created
         let status = orders[section].status
-        if status == ORDER_STATUS.PROGRESSING{
-            sectionView.statusOrder.textColor = UIColor(netHex: 0xCA6A00)
-        }else if(status == ORDER_STATUS.ABORT){
-            sectionView.statusOrder.textColor = UIColor(netHex: 0xBE232D)
-        }else{
+        if status == ORDER_STATUS.COMMENTS_NO{
             sectionView.buttonComments.isHidden = false
-            sectionView.statusOrder.textColor = UIColor(netHex: 0x8FB327)
         }
-        sectionView.statusOrder.text = status.rawValue
         sectionView.nameRest.text = orders[section].restaurantName
         sectionView.imageView.sd_setImage(with: URL(string: orders[section].restaurantUrlIcon), placeholderImage: UIImage(named:"checkBoxOn"))
         return sectionView

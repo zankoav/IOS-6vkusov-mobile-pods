@@ -13,7 +13,7 @@ class ProductItem {
     private var _id: Int
     private var _name: String
     private var _icon:String
-    private var _description: String
+    private var _description: String?
     private var _points: Int?
     private var _category: Dictionary<String,String>
     private var _variant:Variant
@@ -31,6 +31,11 @@ class ProductItem {
     func addCountTo(count:Int){
         _count += count
     }
+    
+    func setCount(count:Int){
+        _count = count
+    }
+    
     
     func minusCount(){
         _count -= 1
@@ -65,7 +70,7 @@ class ProductItem {
     }
     
     
-    init(id :Int, name: String, icon: String, description: String, category: Dictionary<String,String>,  variant:Variant, points: Int?){
+    init(id :Int, name: String, icon: String, description: String?, category: Dictionary<String,String>,  variant:Variant, points: Int?){
         _id = id
         _name = name
         _points = points

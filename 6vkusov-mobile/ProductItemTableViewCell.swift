@@ -21,9 +21,12 @@ class ProductItemTableViewCell: UITableViewCell {
     @IBOutlet weak var width: UILabel!
 
     @IBOutlet weak var totalPrice: UILabel!
+    @IBOutlet weak var totalPriceLable: UILabel!
     @IBOutlet weak var count: UILabel!
     @IBOutlet weak var add: UIButton!
     @IBOutlet weak var minus: UIButton!
+    
+    private var isLast = false
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -44,17 +47,20 @@ class ProductItemTableViewCell: UITableViewCell {
         totalPrice.text = "\(Float(productItem.count) * productItem.variant.price)"
         count.text = "\(productItem.count)"
         productTableVC.updateChekList()
-        
     }
     
     @IBAction func minusPressed(_ sender: Any) {
         if productItem.count == 1 {
-            productTableVC.tableView.reloadData()
+            isLast = true
         }
         basket?.minusProductItemFromBasket(id: productItem.variant.id)
         totalPrice.text = "\(Float(productItem.count) * productItem.variant.price)"
         count.text = "\(productItem.count)"
         productTableVC.updateChekList()
+        if isLast {
+            productTableVC.tableView.reloadData()
+        }
+        
     }
     
     @IBAction func removePressed(_ sender: Any) {

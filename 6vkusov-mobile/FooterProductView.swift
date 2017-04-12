@@ -20,6 +20,7 @@ import UIKit
     var product :Product!
     var slug :String!
     
+    
     override init(frame: CGRect)
     {
         super.init(frame: frame)
@@ -34,11 +35,12 @@ import UIKit
     @IBAction func productAdd(_ sender: Any) {
         if isFreeFood {
             if Singleton.currentUser().getUser()?.getStatus() == STATUS.REGISTRED {
-                print("add to basket")
+                if !(Singleton.currentUser().getUser()?.getBasket().isFreeFoodExist)! {
+                    Singleton.currentUser().getUser()?.getBasket().addProductFromRestaurantOrder(product: product, slug: slug)
+                }
             }
         }else{
             Singleton.currentUser().getUser()?.getBasket().addProductFromRestaurantOrder(product: product, slug: slug)
-
         }
     }
     private func commonInit()

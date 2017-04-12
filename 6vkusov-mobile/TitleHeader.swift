@@ -10,17 +10,17 @@ import UIKit
 import SCLAlertView
 
 
-@IBDesignable class TitleHeader: UIView{
+@IBDesignable class TitleHeader: UIView, LoadJson{
 
     var view: UIView!
-    var slug:String!
+    var order:Order!
     var index:Bool = true {
         didSet{
             viewMain.backgroundColor = index ? UIColor(netHex: 0xFFF8EE) : UIColor(netHex: 0xF5FBFF)
         }
     }
     
-    var comment = [String:Any]()
+    var comment = [String:AnyObject]()
     
     var textfield:UITextView!
     var like,dislike :SSRadioButton!
@@ -33,7 +33,6 @@ import SCLAlertView
     @IBOutlet weak var imageView: UIImageView!
     @IBOutlet weak var nameRest: UILabel!
     @IBOutlet weak var totalPrice: UILabel!
-    @IBOutlet weak var statusOrder: UILabel!
     @IBOutlet weak var dateOrder: UILabel!
     @IBOutlet weak var buttonComments: UIButton!
     
@@ -130,13 +129,24 @@ import SCLAlertView
             return
         }
         
-        comment["type"] = like.isSelected ? true : false
-        comment["session"] = Singleton.currentUser().getUser()!.getProfile()!["session"] as! String
-        comment["text"] = textfield.text
-        comment["slug"] = slug
+        comment["type"] = (like.isSelected ? 1 : 2) as AnyObject
+        comment["session"] = Singleton.currentUser().getUser()!.getProfile()!["session"] as! String as AnyObject
+        comment["text"] = textfield.text as AnyObject
+        comment["id"] = order.id as AnyObject
+        comment["key"] = REST_URL.KEY.rawValue as AnyObject
         
-        print(comment)
+        JsonHelperLoad.init(url: REST_URL.SF_SEND_COMMENT.rawValue, params: comment, act: self, sessionName: nil).startSession()
         alert.hideView()
+    }
+    
+    func loadComplete(obj: Dictionary<String, AnyObject>?, sessionName: String?) {
+        if let request = obj{
+            if let successful = request["status"] as? String{
+                if successful == "successful"{
+                    buttonComments.isHidden = true
+                }
+            }
+        }
     }
     
     private func commonInit()

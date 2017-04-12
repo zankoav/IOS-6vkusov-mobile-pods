@@ -22,10 +22,12 @@ public enum REST_URL: String {
     case SF_ORDERS = "https://6vkusov.by/api/orders"
     case SF_USER = "https://6vkusov.by/api/user"
     case SF_COMMENTS = "https://6vkusov.by/api/restaurant_comments"
+    case SF_SEND_COMMENT = "https://6vkusov.by/api/send_comment"
     case SF_ADD_VARIANTS = "https://6vkusov.by/api/add_variants"
     case SF_REMOVE_VARIANT = "https://6vkusov.by/api/remove_variant"
     case SF_REMOVE_ITEM = "https://6vkusov.by/api/remove_item"
     case SF_CHECKOUT_CART = "https://6vkusov.by/api/checkout_cart"
+    case SF_BASKET_ITEMS = "https://6vkusov.by/api/basket_items"
     
 }
 

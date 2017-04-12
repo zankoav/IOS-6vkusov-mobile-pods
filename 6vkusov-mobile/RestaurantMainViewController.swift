@@ -23,7 +23,6 @@ class RestaurantMainViewController: BaseViewController, UITableViewDelegate, UIT
         widthScreen = UIScreen.main.bounds.width
         let tabController = self.tabBarController as! RestaurantTabController
         restaurant = tabController.restaurant
-        
         JsonHelperLoad(url: REST_URL.SF_RESTAURANT_FOOD.rawValue, params: ["key":REST_URL.KEY.rawValue as AnyObject, "slug":restaurant.slug as AnyObject], act: self, sessionName: "food").startSession()
     }
 

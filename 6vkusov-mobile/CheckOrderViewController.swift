@@ -20,7 +20,7 @@ class CheckOrderViewController: BaseViewController, UITextFieldDelegate, LoadJso
     @IBOutlet weak var sendButton: UIButton!
     
     private var textFieldActive:UITextField?
-
+    private let user = Singleton.currentUser().getUser()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -34,44 +34,57 @@ class CheckOrderViewController: BaseViewController, UITextFieldDelegate, LoadJso
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
         
+        if user?.getStatus() == STATUS.REGISTRED {
+            
+            if let nameUser = user?.getProfile()?["firstName"] as? String{
+                self.name.text = nameUser
+                if let lastName = user?.getProfile()?["lastName"] as? String{
+                    self.name.text = "\(nameUser) \(lastName)"
+                }
+            }
+            
+            if let phoneUser = user?.getProfile()?["phone"] as? String{
+                mobile.text = "+375\(phoneUser)"
+            }
+            
+        }
+        
+        totalPrice.text = "\(user!.getBasket().getTotalPrice())"
+        totalPoints.text = "\(user!.getBasket().getTotalPoints())"
 
     }
     
     func loadComplete(obj: Dictionary<String, AnyObject>?, sessionName: String?) {
-        print(obj ?? "")
+         print(obj)
         if let response = obj {
-            if (sessionName == "send_order"){
+            let appearance = SCLAlertView.SCLAppearance(
+                kTitleFont: UIFont(name: "HelveticaNeue", size: 20)!,
+                kTextFont: UIFont(name: "HelveticaNeue", size: 14)!,
+                kButtonFont: UIFont(name: "HelveticaNeue-Bold", size: 14)!,
+                showCloseButton: false
+            )
+            
+            let alert = SCLAlertView(appearance: appearance)
+            alert.addButton("Ok"){
+                for vc in (self.navigationController?.viewControllers)! {
+                    print("MainViewController")
+                    if vc.restorationIdentifier == "MainViewController"{
+                        self.navigationController?.popToViewController(vc, animated: true)
+                        break
+                    }
+                }
+            }
+            if (sessionName == "send_general_order"){
                 let code = response["status"] as! String
                 if code == "successful" {
-                    
                     self.sendButton.isEnabled = true
                     Singleton.currentUser().getUser()?.getBasket().productItems = [ProductItem]()
-                    
-                    let appearance = SCLAlertView.SCLAppearance(
-                        kTitleFont: UIFont(name: "HelveticaNeue", size: 20)!,
-                        kTextFont: UIFont(name: "HelveticaNeue", size: 14)!,
-                        kButtonFont: UIFont(name: "HelveticaNeue-Bold", size: 14)!,
-                        showCloseButton: false
-                    )
-                    
-                    let alert = SCLAlertView(appearance: appearance)
-                    alert.addButton("Ok"){
-                        for vc in (self.navigationController?.viewControllers)! {
-                            print("MainViewController")
-                            if vc.restorationIdentifier == "MainViewController"{
-                                self.navigationController?.popToViewController(vc, animated: true)
-                                break
-                            }
-                        }
-                    }
-                    
                     alert.showSuccess("Заказ принят!", subTitle: "Ваш заказ №\(response["order"] as! Int), через несколько минут Вам перезвонит оператор, сумма заказа \(response["totalPrice"] as! Float) рублей")
-                    
                 }else{
-                    print(response)
-                    //alertShow(textError: response["message"] as! String)
                     self.sendButton.isEnabled = true
                 }
+            }else{
+                alert.showSuccess("Заказ принят!", subTitle: "Ваш заказ №\(response["order"] as! Int), через несколько минут Вам перезвонит оператор, сумма заказа \(response["totalPrice"] as! Float) рублей")
             }
         }else{
             alertShow(textError: "Ошибка соединения ...")
@@ -135,6 +148,11 @@ class CheckOrderViewController: BaseViewController, UITextFieldDelegate, LoadJso
             let variants = Singleton.currentUser().getUser()?.getBasket().getOrderFromGeneralUser()
             sendHashToTheServerFromGeneralUser(fio: fio!, phone: phone!, address: address!, variants: variants!)
         }
+        if Singleton.currentUser().getUser()?.getStatus() == STATUS.REGISTRED {
+            let session = Singleton.currentUser().getUser()?.getProfile()?["session"] as! String
+            sendHashToTheServerFromRegisterUser(fio: fio!, phone: phone!, address: address!, session: session)
+
+        }
     }
     
     private func sendHashToTheServerFromGeneralUser(fio:String,phone:String,address:String,variants:[Dictionary<String,Int>]){
@@ -145,7 +163,20 @@ class CheckOrderViewController: BaseViewController, UITextFieldDelegate, LoadJso
         dict["address"]  = address as AnyObject
         dict["variants"]  = variants as AnyObject
 
-        JsonHelperLoad(url: REST_URL.SF_SEND_ORDER.rawValue, params: dict, act: self, sessionName: "send_order").startSession()
+        JsonHelperLoad(url: REST_URL.SF_SEND_ORDER.rawValue, params: dict, act: self, sessionName: "send_general_order").startSession()
     }
+    
+    private func sendHashToTheServerFromRegisterUser(fio:String,phone:String,address:String,session:String){
+        var dict = Dictionary<String,AnyObject>()
+        dict["fio"]  = fio as AnyObject
+        dict["key"]  = REST_URL.KEY.rawValue as AnyObject
+        dict["phone"] = phone as AnyObject
+        dict["address"]  = address as AnyObject
+        dict["deliveryType"] = 1 as AnyObject  // ???
+        dict["session"]  = session as AnyObject
+
+        JsonHelperLoad(url: REST_URL.SF_CHECKOUT_CART.rawValue, params: dict, act: self, sessionName: "send_register_order").startSession()
+    }
+
 
 }

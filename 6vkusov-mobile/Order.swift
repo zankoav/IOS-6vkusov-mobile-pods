@@ -9,9 +9,8 @@
 import Foundation
 
 public enum ORDER_STATUS: String {
-    case READY = "доставлен"
-    case PROGRESSING = "в обработке"
-    case ABORT = "отклонен"
+    case COMMENTS_OK
+    case COMMENTS_NO
 }
 
 class Order {
@@ -21,6 +20,8 @@ class Order {
     private var _restaurantSlug: String
     private var _restaurantName: String
     private var _restaurantUrlIcon: String
+    private var _totalPrice:Float
+    private var _id:Int
     private var _products: [Dictionary<String, Any>]
     
     var status:ORDER_STATUS{
@@ -29,6 +30,14 @@ class Order {
     
     var created:String{
         return self._created.toDay
+    }
+    
+    var totalPrice:Float{
+        return self._totalPrice
+    }
+    
+    var id:Int{
+        return self._id
     }
     
     var restaurantSlug:String{
@@ -47,13 +56,16 @@ class Order {
         return self._products
     }
     
-    init(status: ORDER_STATUS, created: UnixTime, restaurantSlug: String, restaurantName: String, restaurantUrlIcon: String,products: [Dictionary<String, Any>]) {
+    init(status: ORDER_STATUS, created: UnixTime, restaurantSlug: String, restaurantName: String, restaurantUrlIcon: String,products: [Dictionary<String, Any>], totalPrice:Float,id:Int) {
         self._status = status
         self._created = created
         self._restaurantSlug = restaurantSlug
         self._restaurantName = restaurantName
         self._restaurantUrlIcon = restaurantUrlIcon
         self._products = products
+        self._totalPrice = totalPrice
+        self._id = id
+
     }
 
 }
