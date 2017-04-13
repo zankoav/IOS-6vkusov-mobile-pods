@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="11762" systemVersion="16D32" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="12118" systemVersion="16E195" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11757"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12086"/>
         <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
         <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -34,6 +34,7 @@
                     <subviews>
                         <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="vtR-Jx-BSh">
                             <rect key="frame" x="141" y="14" width="93" height="94"/>
+                            <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         </imageView>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Ресторан" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Vy5-Nn-Ccb">
                             <rect key="frame" x="143" y="112" width="90" height="23"/>
@@ -110,8 +111,8 @@
                             <nil key="highlightedColor"/>
                         </label>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="KMJ-JK-hpT" customClass="CheckBox" customModule="_vkusov_mobile" customModuleProvider="target">
-                            <rect key="frame" x="320" y="79" width="28" height="29"/>
-                            <state key="normal" image="heart"/>
+                            <rect key="frame" x="313" y="64.5" width="42" height="43.5"/>
+                            <state key="normal" backgroundImage="heart"/>
                         </button>
                     </subviews>
                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
@@ -135,7 +136,7 @@
                         <constraint firstItem="RTa-lv-Xq7" firstAttribute="centerY" secondItem="kdu-EX-26e" secondAttribute="centerY" id="IKS-uq-eoO"/>
                         <constraint firstItem="Dex-oX-4aL" firstAttribute="width" secondItem="l5Q-rG-SXI" secondAttribute="width" id="KkP-RO-cTB"/>
                         <constraint firstItem="Dex-oX-4aL" firstAttribute="height" secondItem="l5Q-rG-SXI" secondAttribute="height" id="Ks5-mh-x5t"/>
-                        <constraint firstItem="KMJ-JK-hpT" firstAttribute="height" secondItem="l5Q-rG-SXI" secondAttribute="height" id="LsV-kn-5Eu"/>
+                        <constraint firstItem="KMJ-JK-hpT" firstAttribute="height" secondItem="l5Q-rG-SXI" secondAttribute="height" multiplier="1.5" id="LsV-kn-5Eu"/>
                         <constraint firstItem="KMJ-JK-hpT" firstAttribute="centerX" secondItem="l5Q-rG-SXI" secondAttribute="centerX" id="MST-Nu-0g5"/>
                         <constraint firstItem="Psl-xS-d3K" firstAttribute="leading" secondItem="dE9-Ga-Isw" secondAttribute="trailing" constant="4" id="OZc-VJ-FD7"/>
                         <constraint firstItem="vtR-Jx-BSh" firstAttribute="leading" secondItem="J8M-h7-gDH" secondAttribute="trailing" constant="8" id="Rz5-hc-6xL"/>
@@ -147,7 +148,7 @@
                         <constraint firstItem="Vy5-Nn-Ccb" firstAttribute="centerY" secondItem="aVs-u5-UJI" secondAttribute="centerY" constant="10" id="ZCa-Yf-5qA"/>
                         <constraint firstItem="n1N-zE-Vlr" firstAttribute="leading" secondItem="aVs-u5-UJI" secondAttribute="leading" constant="8" id="bAE-oT-zIM"/>
                         <constraint firstItem="n1N-zE-Vlr" firstAttribute="top" secondItem="Vy5-Nn-Ccb" secondAttribute="bottom" id="bCI-zF-3LR"/>
-                        <constraint firstItem="KMJ-JK-hpT" firstAttribute="width" secondItem="l5Q-rG-SXI" secondAttribute="width" id="eAg-ab-KcX"/>
+                        <constraint firstItem="KMJ-JK-hpT" firstAttribute="width" secondItem="l5Q-rG-SXI" secondAttribute="width" multiplier="1.5" id="eAg-ab-KcX"/>
                         <constraint firstItem="9bG-aX-MnW" firstAttribute="centerY" secondItem="Dex-oX-4aL" secondAttribute="centerY" id="fSo-Hn-liM"/>
                         <constraint firstItem="dE9-Ga-Isw" firstAttribute="width" secondItem="l5Q-rG-SXI" secondAttribute="width" id="fqS-wZ-J5r"/>
                         <constraint firstItem="l5Q-rG-SXI" firstAttribute="centerY" secondItem="RTa-lv-Xq7" secondAttribute="centerY" id="gOh-N4-PBo"/>

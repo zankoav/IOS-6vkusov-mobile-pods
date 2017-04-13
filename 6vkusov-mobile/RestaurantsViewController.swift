@@ -8,7 +8,7 @@
 
 import UIKit
 
-class RestaurantsViewController: BaseViewController, UITableViewDelegate, UITableViewDataSource, UISearchResultsUpdating {
+class RestaurantsViewController: BaseViewController, UITableViewDelegate, UITableViewDataSource, UISearchResultsUpdating, LoadJson {
     
     @IBOutlet weak var tableView: UITableView!
     
@@ -25,8 +25,10 @@ class RestaurantsViewController: BaseViewController, UITableViewDelegate, UITabl
     @IBOutlet weak var promoBtn: CheckBox!
     @IBOutlet weak var saleBtn: CheckBox!
     
-    private var restaurants:[Restaurant]!
-    private var fullRestaurants:[Restaurant]!
+    
+    var isFavorite = false
+    private var restaurants = [Restaurant]()
+    private var fullRestaurants = [Restaurant]()
     
     private var searchController:UISearchController!
     private var resultsController = RestaurantsTableViewController()
@@ -41,16 +43,50 @@ class RestaurantsViewController: BaseViewController, UITableViewDelegate, UITabl
         }
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        if isFavorite {
+            restaurants = [Restaurant]()
+            self.tableView.reloadData()
+            let user = Singleton.currentUser().getUser()
+            if user?.getStatus() == STATUS.REGISTRED {
+                var dict = Dictionary<String, AnyObject>()
+                dict["key"] = REST_URL.KEY.rawValue as AnyObject
+                dict["session"] = user?.getProfile()?["session"] as AnyObject
+                JsonHelperLoad.init(url: REST_URL.SF_FAVOURITES.rawValue, params: dict, act: self, sessionName: nil).startSession()
+            }else{
+                if let slugs = Singleton.currentUser().getStore()?.getAllSlugs() {
+                    print(slugs)
+                    restaurants = Singleton.currentUser().getStore()!.getFavoriteRestaurants(slugs: slugs)
+                    self.tableView.reloadData()
+                }
+            }
+        }else{
+            restaurants = Singleton.currentUser().getStore()!.getRestaurants(slug: slug)
+        }
+        fullRestaurants = restaurants
+    }
+    
     override func viewDidLoad()
     {
         super.viewDidLoad()
         let backItem = UIBarButtonItem()
         backItem.title = ""
         navigationItem.backBarButtonItem = backItem
-        print(slug)
-        restaurants = Singleton.currentUser().getStore()!.getRestaurants(slug: slug)
-        fullRestaurants = restaurants
         initViews()
+    }
+    
+    func loadComplete(obj: Dictionary<String, AnyObject>?, sessionName: String?) {
+        if let request = obj {
+            if let status = request["status"] as? String {
+                if status == "successful" {
+                    if let slugs = request["slugs"] as? [String] {
+                        restaurants = Singleton.currentUser().getStore()!.getFavoriteRestaurants(slugs: slugs)
+                        self.tableView.reloadData()
+                    }
+                }
+            }
+        }
     }
     
     @IBAction func sliderAction(_ sender: Any)
@@ -143,7 +179,7 @@ class RestaurantsViewController: BaseViewController, UITableViewDelegate, UITabl
     
     func getRestaurantsMaximumDelivery() -> Float
     {
-        var max = restaurants[0].minimal_price
+        var max = restaurants.count > 0 ? restaurants[0].minimal_price : 0
         for rest in restaurants {
             if max < rest.minimal_price{
                 max = rest.minimal_price

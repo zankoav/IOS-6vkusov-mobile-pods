@@ -39,8 +39,10 @@ class BasketViewCntroller: BaseViewController, UITableViewDataSource, UITableVie
         self.navigationController?.pushViewController(chekOutViewController!, animated: true)    }
     
     func updateChekList(){
-        totalPriceItems.text = "\(basket.getTotalPriceFromItems())"
-        totalPrice.text = "\(basket.getTotalPrice())"
+        let priceFromItems = basket.getTotalPriceFromItems()
+        totalPriceItems.text = priceFromItems.getTowNumberAfter()
+        let price = basket.getTotalPrice()
+        totalPrice.text = price.getTowNumberAfter()
         bonusCount.text = "\(basket.getTotalPoints())"
         let ready = basket.isBasketReady()
         buttonOrder.isEnabled = ready
@@ -48,7 +50,8 @@ class BasketViewCntroller: BaseViewController, UITableViewDataSource, UITableVie
         if ready{
             buttonOrder.setTitle("ОФОРМИТЬ ЗАКАЗ", for: UIControlState.normal)
         }else{
-            buttonOrder.setTitle("Минимальная сумма заказа \(basket.getMinimalPrice()) руб.", for: UIControlState.normal)
+            let price = basket.getMinimalPrice()
+            buttonOrder.setTitle("Минимальная сумма заказа \(price.getTowNumberAfter()) руб.", for: UIControlState.normal)
         }
         self.tableView.reloadData()
     }
@@ -78,7 +81,8 @@ class BasketViewCntroller: BaseViewController, UITableViewDataSource, UITableVie
         cell.productItem = basket.productItems[indexPath.row]
         cell.name.text = basket.productItems[indexPath.row].name
         let variant = basket.productItems[indexPath.row].variant
-        cell.totalPrice.text = "\(variant.price * Float(basket.productItems[indexPath.row].count))"
+        let price = variant.price * Float(basket.productItems[indexPath.row].count)
+        cell.totalPrice.text = price.getTowNumberAfter()
         if let points = basket.productItems[indexPath.row].points{
             if points > 0 {
                 cell.add.isHidden = true

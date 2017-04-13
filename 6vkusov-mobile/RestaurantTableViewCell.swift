@@ -27,8 +27,8 @@ class RestaurantTableViewCell: UITableViewCell {
     
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
-        icon.layer.masksToBounds = true
-        icon.layer.cornerRadius = 5.0
+        
+        
         //        icon.layer.borderWidth = 1.0
         //        icon.layer.borderColor = UIColor.lightGray.cgColor
         // Configure the view for the selected state

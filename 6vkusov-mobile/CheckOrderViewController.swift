@@ -48,14 +48,14 @@ class CheckOrderViewController: BaseViewController, UITextFieldDelegate, LoadJso
             }
             
         }
-        
-        totalPrice.text = "\(user!.getBasket().getTotalPrice())"
+        let price = user!.getBasket().getTotalPrice()
+        totalPrice.text = price.getTowNumberAfter()
         totalPoints.text = "\(user!.getBasket().getTotalPoints())"
 
     }
     
     func loadComplete(obj: Dictionary<String, AnyObject>?, sessionName: String?) {
-         print(obj)
+        print(obj)
         if let response = obj {
             let appearance = SCLAlertView.SCLAppearance(
                 kTitleFont: UIFont(name: "HelveticaNeue", size: 20)!,
@@ -67,8 +67,7 @@ class CheckOrderViewController: BaseViewController, UITextFieldDelegate, LoadJso
             let alert = SCLAlertView(appearance: appearance)
             alert.addButton("Ok"){
                 for vc in (self.navigationController?.viewControllers)! {
-                    print("MainViewController")
-                    if vc.restorationIdentifier == "MainViewController"{
+                    if vc.restorationIdentifier == "RestaurantTabController"{
                         self.navigationController?.popToViewController(vc, animated: true)
                         break
                     }
@@ -79,12 +78,14 @@ class CheckOrderViewController: BaseViewController, UITextFieldDelegate, LoadJso
                 if code == "successful" {
                     self.sendButton.isEnabled = true
                     Singleton.currentUser().getUser()?.getBasket().productItems = [ProductItem]()
-                    alert.showSuccess("Заказ принят!", subTitle: "Ваш заказ №\(response["order"] as! Int), через несколько минут Вам перезвонит оператор, сумма заказа \(response["totalPrice"] as! Float) рублей")
+                    let price = response["totalPrice"] as! Float
+                    alert.showSuccess("Заказ принят!", subTitle: "Ваш заказ №\(response["order"] as! Int), через несколько минут Вам перезвонит оператор, сумма заказа \(price.getTowNumberAfter()) рублей")
                 }else{
                     self.sendButton.isEnabled = true
                 }
             }else{
-                alert.showSuccess("Заказ принят!", subTitle: "Ваш заказ №\(response["order"] as! Int), через несколько минут Вам перезвонит оператор, сумма заказа \(response["totalPrice"] as! Float) рублей")
+                let price = response["totalPrice"] as! Float
+                alert.showSuccess("Заказ принят!", subTitle: "Ваш заказ №\(response["order"] as! Int), через несколько минут Вам перезвонит оператор, сумма заказа \(price.getTowNumberAfter()) рублей")
             }
         }else{
             alertShow(textError: "Ошибка соединения ...")

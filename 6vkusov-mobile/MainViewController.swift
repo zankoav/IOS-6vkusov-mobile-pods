@@ -103,6 +103,7 @@ class MainViewController: BaseViewController {
     @IBAction func favoritRestsPressed(_ sender: Any) {
         let vc = self.storyboard?.instantiateViewController(withIdentifier: "RestaurantsViewController") as! RestaurantsViewController
             vc.setType(slug: "pizza")
+            vc.isFavorite = true
             self.navigationController?.pushViewController(vc, animated: true)
     }
     

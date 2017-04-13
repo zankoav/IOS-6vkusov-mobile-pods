@@ -16,14 +16,23 @@ class RestaurantMainViewController: BaseViewController, UITableViewDelegate, UIT
     var restaurant: Restaurant!
     
     @IBOutlet weak var tableView: UITableView!
-    var widthScreen: CGFloat!
+    var widthScreen = UIScreen.main.bounds.width
+    var viewHeader = RestaurantViewHeader()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        widthScreen = UIScreen.main.bounds.width
+        viewHeader = RestaurantViewHeader(frame: CGRect(x: 0, y: 0, width: self.widthScreen, height: self.widthScreen/1.5))
+        viewHeader.favorite.isHidden = true
         let tabController = self.tabBarController as! RestaurantTabController
         restaurant = tabController.restaurant
-        JsonHelperLoad(url: REST_URL.SF_RESTAURANT_FOOD.rawValue, params: ["key":REST_URL.KEY.rawValue as AnyObject, "slug":restaurant.slug as AnyObject], act: self, sessionName: "food").startSession()
+        var dict = Dictionary<String, AnyObject>()
+        dict["key"] = REST_URL.KEY.rawValue as AnyObject
+        dict["slug"] = restaurant.slug as AnyObject
+        if Singleton.currentUser().getUser()?.getStatus() == STATUS.REGISTRED {
+            dict["session"] = Singleton.currentUser().getUser()?.getProfile()?["session"] as AnyObject
+        }
+
+        JsonHelperLoad(url: REST_URL.SF_RESTAURANT_FOOD.rawValue, params: dict, act: self, sessionName: "food").startSession()
     }
 
     override func didReceiveMemoryWarning() {
@@ -62,21 +71,24 @@ class RestaurantMainViewController: BaseViewController, UITableViewDelegate, UIT
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         if section == 0{
-            let view = RestaurantViewHeader(frame: CGRect(x: 0, y: 0, width: widthScreen, height: widthScreen/1.5))
-            view.favorite.checkedImage = UIImage(named:"heart-full")!
-            view.favorite.uncheckedImage = UIImage(named:"heart")!
-            view.favorite.setImage(UIImage(named:"heart"), for: .normal)
-            view.timeWork.text = restaurant.working_time
+            viewHeader.restaurantSlug = restaurant.slug
+            viewHeader.favorite.checkedImage = UIImage(named:"heart-full")!
+            viewHeader.favorite.uncheckedImage = UIImage(named:"heart")!
+            if Singleton.currentUser().getUser()?.getStatus() == STATUS.GENERAL {
+                viewHeader.favorite.isChecked = (Singleton.currentUser().getStore()?.isFavoriteSlug(slug: restaurant.slug))!
+                viewHeader.favorite.isHidden = false
+            }
+            viewHeader.timeWork.text = restaurant.working_time
             let likes = restaurant.comments["likes"]!
             let dislikes = restaurant.comments["dislikes"]!
-            view.likeCount.text = "\(likes)"
-            view.dislikeCount.text = "\(dislikes)"
-            view.icon.sd_setImage(with: URL(string:restaurant.iconURL), placeholderImage: UIImage(named:"user"))
-            view.name.text = restaurant.name
-            view.kitchens.text = restaurant.kitchens
-            view.minPrice.text = "\(restaurant.minimal_price) руб."
-            view.deliveryTime.text = restaurant.delivery_time + " мин."
-            return view
+            viewHeader.likeCount.text = "\(likes)"
+            viewHeader.dislikeCount.text = "\(dislikes)"
+            viewHeader.icon.sd_setImage(with: URL(string:restaurant.iconURL), placeholderImage: UIImage(named:"user"))
+            viewHeader.name.text = restaurant.name
+            viewHeader.kitchens.text = restaurant.kitchens
+            viewHeader.minPrice.text = "\(restaurant.minimal_price) руб."
+            viewHeader.deliveryTime.text = restaurant.delivery_time + " мин."
+            return viewHeader
         }else{
             return nil
         }
@@ -90,16 +102,23 @@ class RestaurantMainViewController: BaseViewController, UITableViewDelegate, UIT
     }
     
     func loadComplete(obj: Dictionary<String, AnyObject>?, sessionName: String?) {
-        
         if let object = obj {
-            self.products = getProducts(obj: object)
-            if products.count > 0 {
-                self.menus = getMenu(products: self.products)
-            }
-            if self.menus.count > 0 && self.products.count > 0 {
-                self.tableView.reloadData()
+            if sessionName == "food" {
+                if let isFavorite = object["isFavorite"] as? Bool {
+                    print(isFavorite)
+                    viewHeader.favorite.isChecked = isFavorite
+                    viewHeader.favorite.isHidden = false
+                }
+                self.products = getProducts(obj: object)
+                if products.count > 0 {
+                    self.menus = getMenu(products: self.products)
+                }
+                if self.menus.count > 0 && self.products.count > 0 {
+                    self.tableView.reloadData()
+                }
             }
         }
+        
     }
     
     private func getProducts(obj: Dictionary<String, AnyObject>) -> [Product]{
@@ -173,8 +192,15 @@ class RestaurantMainViewController: BaseViewController, UITableViewDelegate, UIT
     
     private func getProdsByCat(slug: String) ->[Product]{
         var prods = [Product]()
+        
         for pr in self.products {
-            if pr.category["slug"] == slug {
+            if pr.category["slug"] != "free_food"{
+                if pr.points != nil {
+                    continue
+                }
+            }
+            
+            if pr.category["slug"] == slug  {
                 prods.append(pr)
             }
         }

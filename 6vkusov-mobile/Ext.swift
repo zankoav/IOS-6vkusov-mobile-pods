@@ -37,6 +37,15 @@ extension String {
     }
 }
 
+extension Float {
+    
+    func getTowNumberAfter()->String{
+        let num = Int(self*100)
+        let answer = num%10 == 0 ? "\(self)0" : "\(self)"
+        return answer
+    }
+}
+
 typealias UnixTime = Int
 
 extension UnixTime {

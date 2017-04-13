@@ -15,6 +15,7 @@ public enum REST_URL: String {
 
     case SF_LOGIN = "https://6vkusov.by/api/login"
     case SF_REGISTRATION = "https://6vkusov.by/api/register"
+    case SF_RESET_PASSWORD = "https://6vkusov.by/api/reset_password"
     case SF_CATEGORIES = "https://6vkusov.by/api/categories"
     case SF_RESTAURANTS = "https://6vkusov.by/api/restaurants"
     case SF_RESTAURANT_FOOD = "https://6vkusov.by/api/food"
@@ -28,7 +29,9 @@ public enum REST_URL: String {
     case SF_REMOVE_ITEM = "https://6vkusov.by/api/remove_item"
     case SF_CHECKOUT_CART = "https://6vkusov.by/api/checkout_cart"
     case SF_BASKET_ITEMS = "https://6vkusov.by/api/basket_items"
-    
+    case SF_FAVOURITE = "https://6vkusov.by/api/favourite"
+    case SF_FAVOURITES = "https://6vkusov.by/api/favourites"
+
 }
 
 
@@ -38,6 +41,8 @@ class LocalStorage: LoadJson{
     public let APP_CATEGORIES = "categories"
     public let APP_RESTAURANTS = "restaurants"
     public let APP_PROFILE = "profile"
+    public let APP_SLUGS = "slugs"
+
     public let BOUNUS_BY_BYN = 5
     
     private let vc:MainViewController
@@ -252,6 +257,17 @@ class LocalStorage: LoadJson{
         }
     }
     
+    func getFavoriteRestaurants(slugs: [String])->[Restaurant]{
+        var rests = [Restaurant]()
+        let restaurants = getRestaurants(slug: "all")
+        for r in restaurants {
+            if(slugs.contains(r.slug)){
+                rests.append(r)
+            }
+        }
+        return rests
+    }
+    
     private func getRestaurantsBySlug(restaurants: [Restaurant], slug: String)->[Restaurant]{
         var rests = [Restaurant]()
         for r in restaurants {
@@ -340,4 +356,60 @@ class LocalStorage: LoadJson{
         }
         return nil
     }
+    
+    func getAllSlugs()->[String]? {
+        if let slugsStr = getDataStorage(key: APP_SLUGS) {
+            if let data = slugsStr.data(using: .utf8) {
+                do {
+                    let slugs = try JSONSerialization.jsonObject(with: data, options: []) as? [String]
+                    return slugs
+                } catch let error as NSError {
+                    print(error)
+                }
+            }
+        }
+        return nil
+    }
+    
+    func addFavoriteSlug(slug:String){
+        var slugs = getAllSlugs()
+        if  slugs != nil {
+            if !slugs!.contains(slug) {
+                slugs!.append(slug)
+            }
+        }else{
+            slugs = [slug]
+        }
+        do {
+            let dataSlugs = try JSONSerialization.data(withJSONObject: slugs!, options: [])
+            let jsonSlugs = String(data: dataSlugs, encoding: .utf8)
+            setStringValueStorage(key: APP_SLUGS, value: jsonSlugs!)
+        }catch let error as NSError {
+            print(error)
+        }
+    }
+    
+    func removeFavoriteSlug(slug:String){
+        var slugs = getAllSlugs()
+        if  slugs != nil {
+            if  let index = slugs!.index(of: slug){
+                slugs!.remove(at: index)
+                do {
+                    let dataSlugs = try JSONSerialization.data(withJSONObject: slugs!, options: [])
+                    let jsonSlugs = String(data: dataSlugs, encoding: .utf8)
+                    setStringValueStorage(key: APP_SLUGS, value: jsonSlugs!)
+                }catch let error as NSError {
+                    print(error)
+                }
+            }
+        }
+    }
+    
+    func isFavoriteSlug(slug: String)->Bool{
+        if let slugs = getAllSlugs() {
+            return slugs.contains(slug)
+        }
+        return false
+    }
+
 }

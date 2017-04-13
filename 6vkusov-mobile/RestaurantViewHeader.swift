@@ -8,7 +8,7 @@
 
 import UIKit
 
-@IBDesignable class RestaurantViewHeader: UIView {
+@IBDesignable class RestaurantViewHeader: UIView, LoadJson{
 
     var view: UIView!
     
@@ -22,6 +22,10 @@ import UIKit
     @IBOutlet weak var deliveryTime: UILabel!
     
     @IBOutlet weak var favorite: CheckBox!
+    
+    
+    var restaurantSlug:String!
+    
 
     override init(frame: CGRect)
     {
@@ -34,6 +38,10 @@ import UIKit
         self.commonInit()
     }
     
+    func loadComplete(obj: Dictionary<String, AnyObject>?, sessionName: String?) {
+        print(obj)
+    }
+    
     private func commonInit()
     {
         let bundle = Bundle(for: type(of: self))
@@ -41,7 +49,27 @@ import UIKit
         self.view = nib.instantiate(withOwner: self, options: nil).first as! UIView
         self.view.frame = self.bounds
         self.view.autoresizingMask = [.flexibleHeight, .flexibleWidth]
+        favorite.addTarget(self, action: #selector(clickFavorite), for: UIControlEvents.touchUpInside)
+        self.icon.layer.masksToBounds = true
+        self.icon.layer.cornerRadius = 5
         self.addSubview(self.view)
+    }
+    
+    func clickFavorite(){
+        if Singleton.currentUser().getUser()?.getStatus() == STATUS.REGISTRED {
+            var dict = Dictionary<String, AnyObject>()
+            dict["key"] = REST_URL.KEY.rawValue as AnyObject
+            dict["session"] = Singleton.currentUser().getUser()?.getProfile()?["session"] as AnyObject
+            dict["slug"] = restaurantSlug as AnyObject
+            print(dict)
+            JsonHelperLoad.init(url: REST_URL.SF_FAVOURITE.rawValue, params: dict, act: self, sessionName: nil).startSession()
+        }else{
+            if favorite.isChecked {
+                Singleton.currentUser().getStore()?.addFavoriteSlug(slug: restaurantSlug)
+            }else{
+                Singleton.currentUser().getStore()?.removeFavoriteSlug(slug: restaurantSlug)
+            }
+        }
     }
 
 

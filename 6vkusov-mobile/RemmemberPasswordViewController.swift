@@ -61,14 +61,27 @@ class RemmemberPasswordViewController: BaseViewController, UITextFieldDelegate, 
     
     
     private func sendHashToTheServer(email:String){
-        var dict = Dictionary<String,String>()
-        dict["email"]  = email
-        let url = "https://6vkusov.by/api/remmember_password"
-        //JsonHelperLoad(url: url, params: nil, act: self, sessionName: "login").startSession()
+        var dict = Dictionary<String,AnyObject>()
+        dict["email"]  = email as AnyObject
+        dict["key"]  = REST_URL.KEY.rawValue as AnyObject
+        JsonHelperLoad(url: REST_URL.SF_RESET_PASSWORD.rawValue, params: dict, act: self, sessionName: nil).startSession()
     }
     
     func loadComplete(obj: Dictionary<String, AnyObject>?, sessionName: String?) {
-        
+        if let request = obj {
+            if let status = request["status"] as? String{
+                if status == "successful" {
+                    let vc = self.navigationController?.viewControllers[1] as! LoginViewController
+                    vc.message.text = "Вам на почту \(request["email"] as! String) отправлена ссылка для восстановления пароля"
+                    self.sendButton.isEnabled = true
+                    let _ = self.navigationController?.popViewController(animated: true)
+                    self.sendButton.isEnabled = true
+                }else{
+                    alertShow(textError: request["message"] as! String)
+                    self.sendButton.isEnabled = true
+                }
+            }
+        }
     }
     
     
@@ -84,6 +97,7 @@ class RemmemberPasswordViewController: BaseViewController, UITextFieldDelegate, 
     
     @IBAction func sendButtonPressed(_ sender: Any) {
         let email = self.email.text
+        self.sendButton.isEnabled = false
 
         if(!Validator.email(email: email!)){
             let alert = UIAlertController(title: "Ошибка", message: "Не верный формат email", preferredStyle: UIAlertControllerStyle.alert)
@@ -91,7 +105,7 @@ class RemmemberPasswordViewController: BaseViewController, UITextFieldDelegate, 
             self.present(alert, animated: true, completion: nil)
             return
         }else{
-            sendHashToTheServer(email: email!);
+            sendHashToTheServer(email: email!)
         }
     }
     

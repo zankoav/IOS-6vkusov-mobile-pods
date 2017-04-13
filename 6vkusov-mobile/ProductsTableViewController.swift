@@ -119,7 +119,9 @@ class ProductsTableViewController: UITableViewController, BasketViewDelegate, Re
         cell.variant = products[indexPath.section].variants[indexPath.row]
         cell.vc = self
         
-        cell.price.text = variant.count == 0 ? "\(variant.price)" : "\(Float(variant.count)*variant.price)"
+        let price = Float(variant.count)*variant.price
+        print("\(price)  - \(price.getTowNumberAfter())")
+        cell.price.text = variant.count == 0 ? variant.price.getTowNumberAfter() : price.getTowNumberAfter()
         
         var desc = ""
         if let size = variant.size {
