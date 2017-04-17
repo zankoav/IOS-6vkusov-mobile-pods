@@ -31,6 +31,8 @@ public enum REST_URL: String {
     case SF_BASKET_ITEMS = "https://6vkusov.by/api/basket_items"
     case SF_FAVOURITE = "https://6vkusov.by/api/favourite"
     case SF_FAVOURITES = "https://6vkusov.by/api/favourites"
+    case SF_INVIREMENT = "https://6vkusov.by/api/invite"
+
 
 }
 

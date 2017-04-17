@@ -33,14 +33,16 @@ class VariantTableViewCell: UITableViewCell {
     @IBAction func buttonAdded(_ sender: Any) {
         variant.addCount()
         count.text = "\(variant.count)"
-        price.text = "\(Float(variant.count) * variant.price)"
+        let priceStr = (Float(variant.count) * variant.price).getTowNumberAfter()
+        price.text = priceStr
     }
     
     @IBAction func minusPressed(_ sender: Any) {
         if variant.count > 0 {
             variant.minusCount()
             count.text = "\(variant.count)"
-            price.text = "\(Float(variant.count) * variant.price)"
+            let priceStr = (Float(variant.count) * variant.price).getTowNumberAfter()
+            price.text = priceStr
         }
     }
     

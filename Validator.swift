@@ -35,4 +35,10 @@ class Validator {
         let nameTest = NSPredicate(format:"SELF MATCHES %@", nameRegEx)
         return nameTest.evaluate(with: name)
     }
+    
+    class func onlyNumbers(name:String)->Bool{
+        let nameRegEx = "^[0-9]+$"
+        let nameTest = NSPredicate(format:"SELF MATCHES %@", nameRegEx)
+        return nameTest.evaluate(with: name)
+    }
 }

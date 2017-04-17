@@ -8,7 +8,7 @@
 
 import UIKit
 
-class BonusViewController: BaseViewController,UITextFieldDelegate {
+class BonusViewController: BaseViewController,UITextFieldDelegate, LoadJson {
 
     @IBOutlet weak var friendAddress: UITextField!
     @IBOutlet weak var callButton: UIButton!
@@ -34,6 +34,20 @@ class BonusViewController: BaseViewController,UITextFieldDelegate {
 
         // Do any additional setup after loading the view.
     }
+    
+    func loadComplete(obj: Dictionary<String, AnyObject>?, sessionName: String?) {
+        if let object = obj {
+            if let status = object["status"] as? String {
+                if status == "error" {
+                    if let message = object["message"] as? String {
+                        alertShow(textError:message)
+                    }
+                }else{
+                    print(object)
+                }
+            }
+        }
+    }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -58,10 +72,12 @@ class BonusViewController: BaseViewController,UITextFieldDelegate {
             callButton.isEnabled = true
             return
         }else{
-            print("send \(email)")
+            var dict = Dictionary<String,AnyObject>()
+            dict["key"]  = REST_URL.KEY.rawValue as AnyObject
+            dict["email"] = email as AnyObject
+            dict["session"]  = Singleton.currentUser().getUser()?.getProfile()?["session"] as AnyObject
+            JsonHelperLoad.init(url: REST_URL.SF_INVIREMENT.rawValue, params: dict, act: self, sessionName: nil).startSession()
         }
-
-        
     }
 
 
