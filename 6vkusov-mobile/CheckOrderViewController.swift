@@ -105,6 +105,9 @@ class CheckOrderViewController: BaseViewController, UITextFieldDelegate, LoadJso
                 }
             }else{
                 let price = response["totalPrice"] as! Float
+                let points = response["points"] as! Int
+                print(points)
+                Singleton.currentUser().getUser()?.setPoints(points: points)
                 alert.showSuccess("Заказ принят!", subTitle: "Ваш заказ №\(response["order"] as! Int), через несколько минут Вам перезвонит оператор, сумма заказа \(price.getTowNumberAfter()) рублей")
             }
         }else{

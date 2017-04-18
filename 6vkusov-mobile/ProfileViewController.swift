@@ -9,7 +9,7 @@
 import UIKit
 import SDWebImage
 
-class ProfileViewController: BaseViewController, UITableViewDelegate, UITableViewDataSource {
+class ProfileViewController: BaseViewController, UITableViewDelegate, UITableViewDataSource, LoadJson {
     @IBOutlet weak var nameUser: UILabel!
     @IBOutlet weak var bonusUser: UILabel!
     @IBOutlet weak var imageUser: UIImageView!
@@ -23,12 +23,28 @@ class ProfileViewController: BaseViewController, UITableViewDelegate, UITableVie
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.tabBarController?.title = "Профиль"
+        
+        bonusUser.isHidden = true
+        var dict = Dictionary<String,AnyObject>()
+        dict["key"] = REST_URL.KEY.rawValue as AnyObject
+        dict["session"] = Singleton.currentUser().getUser()?.getProfile()?["session"] as AnyObject
+        JsonHelperLoad.init(url: REST_URL.SF_GET_USER_POINTS.rawValue, params: dict, act: self, sessionName: nil).startSession()
     }
 
+    func loadComplete(obj: Dictionary<String, AnyObject>?, sessionName: String?) {
+        if let json = obj {
+            if let points = json["points"] as? Int {
+                Singleton.currentUser().getUser()?.setPoints(points: points)
+                bonusUser.text = "\(points) баллов "
+                bonusUser.isHidden = false
+            }
+        }
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         heightCell = UIScreen.main.bounds.height/3
+        
         seggests = [
             Suggest(name: "ШЕФ-БУРГЕР",url: "/uploads/img/promo/58811668cd4df.png", slug: "3-povara"),
             Suggest(name: "ШЕФ-БУРГЕР",url: "/uploads/img/promo/58811668cd4df.png", slug: "3-povara"),
@@ -52,9 +68,6 @@ class ProfileViewController: BaseViewController, UITableViewDelegate, UITableVie
         }else{
             nameUser.text = firstName
         }
-                
-        let points = userData?["points"] as! Int
-        bonusUser.text = "\(points) баллов    "
         
         let img_path = userData?["img_path"] as! String
         if let avatar = userData?["avatar"] as? String {

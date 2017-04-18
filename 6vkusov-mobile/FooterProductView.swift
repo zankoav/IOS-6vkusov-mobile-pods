@@ -35,7 +35,7 @@ import UIKit
     @IBAction func productAdd(_ sender: Any) {
         if isFreeFood {
             if Singleton.currentUser().getUser()?.getStatus() == STATUS.REGISTRED {
-                if !(Singleton.currentUser().getUser()?.getBasket().isFreeFoodExist)! {
+                if !(Singleton.currentUser().getUser()?.getBasket().isFreeFoodExist)! && (Singleton.currentUser().getUser()?.getPoints())! >= product.points! {
                     Singleton.currentUser().getUser()?.getBasket().addProductFromRestaurantOrder(product: product, slug: slug)
                 }
             }

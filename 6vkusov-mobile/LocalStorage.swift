@@ -32,6 +32,8 @@ public enum REST_URL: String {
     case SF_FAVOURITE = "https://6vkusov.by/api/favourite"
     case SF_FAVOURITES = "https://6vkusov.by/api/favourites"
     case SF_INVIREMENT = "https://6vkusov.by/api/invite"
+    case SF_GET_USER_POINTS = "https://6vkusov.by/api/user_points"
+
 
 
 }
@@ -111,7 +113,7 @@ class LocalStorage: LoadJson{
                     let dataUser = try JSONSerialization.data(withJSONObject: objectUser, options: [])
                     let jsonUser = String(data: dataUser, encoding: .utf8)
                     setStringValueStorage(key: APP_PROFILE, value: jsonUser!)
-                    Singleton.currentUser().setUser(user: Registred())
+                    Singleton.currentUser().setUser(user: Registred(points:objectUser["points"] as! Int))
                     break
                 default:break
                 }
