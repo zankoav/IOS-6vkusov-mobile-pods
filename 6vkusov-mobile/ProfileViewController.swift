@@ -14,11 +14,12 @@ class ProfileViewController: BaseViewController, UITableViewDelegate, UITableVie
     @IBOutlet weak var saggestsTableView: UITableView!
     
     private var seggests:[Suggest] = []
+    private var promoProducts:[PromoProduct] = []
+
     private var heightCell:CGFloat = 0
     var widthScreen = UIScreen.main.bounds.width
     var viewHeader = ProfileViewHeader()
 
-    
     private var userData = Singleton.currentUser().getUser()!.getProfile()
     
     override func viewWillAppear(_ animated: Bool) {
@@ -26,28 +27,43 @@ class ProfileViewController: BaseViewController, UITableViewDelegate, UITableVie
         self.tabBarController?.title = "Профиль"
     }
 
-    func loadComplete(obj: Dictionary<String, AnyObject>?, sessionName: String?) {
-        
-    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        viewHeader.controller = self
         
-        heightCell = UIScreen.main.bounds.height/3
-        
-        seggests = [
-            Suggest(name: "ШЕФ-БУРГЕР",url: "/uploads/img/promo/58811668cd4df.png", slug: "3-povara"),
-            Suggest(name: "ШЕФ-БУРГЕР",url: "/uploads/img/promo/58811668cd4df.png", slug: "3-povara"),
-            Suggest(name: "ШЕФ-БУРГЕР",url: "/uploads/img/promo/58811668cd4df.png", slug: "3-povara"),
-            Suggest(name: "ШЕФ-БУРГЕР",url: "/uploads/img/promo/58811668cd4df.png", slug: "3-povara")
-        ]
-        
-        initViews()
+        JsonHelperLoad(url: REST_URL.SF_FOOD_POINTS.rawValue, params: ["key":REST_URL.KEY.rawValue as AnyObject], act: self, sessionName: REST_URL.SF_FOOD_POINTS.rawValue).startSession()
+    
+    }
+    
+    func loadComplete(obj: Dictionary<String, AnyObject>?, sessionName: String?) {
+        if let request = obj {
+            if sessionName == REST_URL.SF_FOOD_POINTS.rawValue{
+                if let status = request["status"] as? String {
+                    if status == "successful" {
+                        print("status")
+                        if let items = request["items"] as? [AnyObject]{
+                            print("items")
+                            let image_path = request["image_path"] as? String
+                            for item in items {
+                                let name = item["name"] as! String
+                                let slug = item["restaurant_slug"] as! String
+                                let points = item["points"] as! Int
+                                let icon = item["icon"] as! String
+                                let description = item["description"] as? String
+                                
+                                self.promoProducts.append(PromoProduct(points: points, name: name, url: image_path!+"/"+icon, restaurant_slug: slug, description: description))
+                            }
+                            self.saggestsTableView.reloadData()
+                        }
+                    }
+                }
+                
+            }
+        }
+
     }
 
-    private func initViews(){
-        
-    }
     
     func numberOfSections(in tableView: UITableView) -> Int {
         return 2
@@ -57,12 +73,12 @@ class ProfileViewController: BaseViewController, UITableViewDelegate, UITableVie
         if section == 0{
             return 0
         }else{
-            return self.seggests.count
+            return self.promoProducts.count
         }
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return heightCell
+        return 140
     }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
@@ -111,18 +127,32 @@ class ProfileViewController: BaseViewController, UITableViewDelegate, UITableVie
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell =  tableView.dequeueReusableCell(withIdentifier: "suggest_cell") as! SuggestTableViewCell
-        cell.name.text = seggests[indexPath.row].name
-        cell.icon.sd_setImage(with: URL(string: seggests[indexPath.row].iconURL), placeholderImage: UIImage(named:"product"))
+        cell.slug = promoProducts[indexPath.row].restaurant_slug
+        cell.controller = self
+        cell.name.text = promoProducts[indexPath.row].name
+        cell.points.text = "\(promoProducts[indexPath.row].points) баллов"
+        cell.icon.sd_setImage(with: URL(string: promoProducts[indexPath.row].iconURL), placeholderImage: UIImage(named:"product"))
         return cell
     }
     
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    func clickCallFriends() {
+        let viewController = self.storyboard?.instantiateViewController(withIdentifier: "BonusViewController") as! BonusViewController
+        self.navigationController?.pushViewController(viewController, animated: true)
+    }
+    
+    func clickSettingsChange(){
+        let viewController = self.storyboard?.instantiateViewController(withIdentifier: "SettingsUserViewController") as! SettingsUserViewController
+        self.navigationController?.pushViewController(viewController, animated: true)
+    }
+    
+    func clickRestaurantButton(slug:String){
         let vc = self.storyboard?.instantiateViewController(withIdentifier: "RestaurantTabController") as! RestaurantTabController
-        print(seggests[indexPath.row].slug)
-        
-        if let restaurant = Singleton.currentUser().getStore()!.getRestaurantBySlugName(slug:seggests[indexPath.row].slug) {
+        if let restaurant = Singleton.currentUser().getStore()!.getRestaurantBySlugName(slug:slug) {
             vc.restaurant = restaurant
             self.navigationController?.pushViewController(vc, animated: true)
         }
+
     }
+
+
 }

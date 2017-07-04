@@ -54,6 +54,11 @@ extension String {
         Длинна строки
     */
     
+    func trim() -> String
+    {
+        return self.trimmingCharacters(in: NSCharacterSet.whitespaces)
+    }
+    
     var length: Int {
         return self.characters.count
     }

@@ -19,6 +19,8 @@ import UIKit
     @IBOutlet weak var changeBtn: UIButton!
     @IBOutlet weak var callFriendsBtn: UIButton!
     @IBOutlet weak var bonus: UILabel!
+    
+    var controller: ProfileViewController?
 
     var attrs = [
         NSFontAttributeName : UIFont.systemFont(ofSize: 12.0),
@@ -82,11 +84,15 @@ import UIKit
     }
     
     @IBAction func clickCallFriends(_ sender: Any) {
-        print("clickCallFriends")
+        if self.controller != nil {
+            self.controller?.clickCallFriends()
+        }
     }
     
     @IBAction func clickSettingsChange(_ sender: Any){
-        print("clickSettingsChange")
+        if self.controller != nil {
+            self.controller?.clickSettingsChange()
+        }
     }
     
     

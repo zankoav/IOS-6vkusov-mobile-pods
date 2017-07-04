@@ -10,6 +10,12 @@ import Foundation
 
 class Validator {
     
+    class func validatePhoneNumber(phone: String) -> Bool {
+        let PHONE_REGEX = "^\\+375(29|25|44|33)\\d{7}$"
+        let phoneTest = NSPredicate(format: "SELF MATCHES %@", PHONE_REGEX)
+        return phoneTest.evaluate(with: phone)
+    }
+
     class func email(email:String)->Bool{
         let emailRegEx = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}"
         let emailTest = NSPredicate(format:"SELF MATCHES %@", emailRegEx)

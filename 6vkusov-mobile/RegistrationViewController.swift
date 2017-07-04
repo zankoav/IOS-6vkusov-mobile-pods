@@ -159,6 +159,7 @@ class RegistrationViewController: BaseViewController, UITextFieldDelegate, LoadJ
         
     }
     
+        
     private func sendHashToTheServer(email:String,password:String,name:String,promo:String,newsBtn:Int){
         var dict = Dictionary<String,AnyObject>()
         dict["key"]  = REST_URL.KEY.rawValue as AnyObject

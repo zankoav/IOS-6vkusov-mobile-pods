@@ -8,302 +8,179 @@
 
 import UIKit
 
-class SettingsUserViewController: BaseViewController, UITableViewDelegate, UITableViewDataSource {
-
-    var settings = [Dictionary<String,Any>]()
-    private var heightCell:CGFloat = 0
-    var button:UIBarButtonItem?
-    func gg(){
-        print("gg")
-    }
+class SettingsUserViewController: BaseViewController, UITextFieldDelegate, LoadJson { 
     
     
+    @IBOutlet weak var name: UITextField!
+    @IBOutlet weak var fmale: UITextField!
+    @IBOutlet weak var phone: UITextField!
+    private var textFieldActive:UITextField?
+    
+    @IBOutlet weak var saveBtn: UIButton!
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        self.tabBarController?.title = "Настройки"
-        self.tabBarController?.navigationItem.rightBarButtonItem = button
+        self.navigationController?.isNavigationBarHidden = false
     }
+    
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        self.tabBarController?.navigationItem.rightBarButtonItem = nil
+        self.navigationController?.isNavigationBarHidden = true
     }
-    
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        if let nav = self.navigationController {
+            nav.navigationBar.items?[1].title = ""
+        }
+        initViews()
+        let theTap = UITapGestureRecognizer(target: self, action: #selector(scrollViewTapped))
+        self.view.addGestureRecognizer(theTap)
         
-        button = UIBarButtonItem(title: "Сохранить", style: .plain, target: self, action:#selector(gg))
-        heightCell = UIScreen.main.bounds.height/4
-        settings = [
-            [
-                "type":"check",
-                "name":"Предпочтения по кухне",
-                "items": [
-                    [
-                        "name":"Азиатская",
-                        "value":false
-                    ],
-                    [
-                        "name":"Грузинская",
-                        "value":false
-                    ],
-                    [
-                        "name":"Европейская",
-                        "value":false
-                    ],
-                    [
-                        "name":"Белорусская",
-                        "value":false
-                    ],
-                    [
-                        "name":"Итальянская",
-                        "value":false
-                    ],
-                    [
-                        "name":"Итальянская",
-                        "value":false
-                    ],
-                    [
-                        "name":"Американская",
-                        "value":false
-                    ],
-                    [
-                        "name":"Японская",
-                        "value":false
-                    ],
-                    [
-                        "name":"Китайская",
-                        "value":false
-                    ]
-            
-                ]
-            ],
-            [
-                "type":"check",
-                "name":"Любимые блюда",
-                "items": [
-                    [
-                        "name":"Пироги",
-                        "value":false
-                    ],
-                    [
-                        "name":"Супы",
-                        "value":false
-                    ],
-                    [
-                        "name":"Плов",
-                        "value":false
-                    ],
-                    [
-                        "name":"Бургеры",
-                        "value":false
-                    ],
-                    [
-                        "name":"Суши",
-                        "value":false
-                    ],
-                    [
-                        "name":"Паста",
-                        "value":false
-                    ],
-                    [
-                        "name":"Салаты",
-                        "value":false
-                    ],
-                    [
-                        "name":"Стейки",
-                        "value":false
-                    ],
-                    [
-                        "name":"Пицца",
-                        "value":false
-                    ],
-                    [
-                        "name":"Шаурма",
-                        "value":false
-                    ]
-                    
-                ]
-            ],
-            [
-                "type":"radio",
-                "name":"Как часто вы делаете закказ",
-                "items": [
-                    [
-                        "name":"Каждый день",
-                        "value":false
-                    ],
-                    [
-                        "name":"Один раз в неделю",
-                        "value":false
-                    ],
-                    [
-                        "name":"Один раз в месяц",
-                        "value":false
-                    ],
-                    [
-                        "name":"Несколько раз в неделю",
-                        "value":false
-                    ],
-                    [
-                        "name":"Несколько раз в месяц",
-                        "value":false
-                    ],
-                    [
-                        "name":"Как получится",
-                        "value":false
-                    ]
-                ]
-            ],
-            [
-                "type":"radio",
-                "name":"Ваш средний заказ",
-                "items": [
-                    [
-                        "name":"Минимальная сумма доставки",
-                        "value":false
-                    ],
-                    [
-                        "name":"40-60 руб",
-                        "value":false
-                    ],
-                    [
-                        "name":"более 100 руб",
-                        "value":false
-                    ],
-                    [
-                        "name":"20-40 руб",
-                        "value":false
-                    ],
-                    [
-                        "name":"60-100 руб",
-                        "value":false
-                    ]
-                ]
-            ],
-            [
-                "type":"check",
-                "name":"От куда вы узнали о сервисе",
-                "items": [
-                    [
-                        "name":"Через поисковик",
-                        "value":false
-                    ],
-                    [
-                        "name":"Телевидение",
-                        "value":false
-                    ],
-                    [
-                        "name":"Буклеты",
-                        "value":false
-                    ],
-                    [
-                        "name":"Наружная реклама",
-                        "value":false
-                    ],
-                    [
-                        "name":"Соцсети",
-                        "value":false
-                    ],
-                    [
-                        "name":"Брошюры",
-                        "value":false
-                    ],
-                    [
-                        "name":"Радио",
-                        "value":false
-                    ],
-                    [
-                        "name":"Контекстная реклама",
-                        "value":false
-                    ]
-                ]
-            ]
-        ]
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
+    }
+    
+    @IBAction func btnPressed(_ sender: Any) {
+        let name = self.name.text?.trim()
+        let fmale = self.fmale.text?.trim()
+        let phone = self.phone.text?.trim()
         
-        // Do any additional setup after loading the view.
-    }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-    
-    func numberOfSections(in tableView: UITableView) -> Int {
-        return settings.count + 1
-    }
-    
-    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        if section == 0 {
-            return "Персональные данные"
+        saveBtn.isEnabled = false
+        if(!Validator.minLength(password: name!,length: 2)){
+            let alert = UIAlertController(title: "Ошибка", message: "Слишком короткое имя", preferredStyle: UIAlertControllerStyle.alert)
+            alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
+            self.present(alert, animated: true, completion: nil)
+            self.saveBtn.isEnabled = true
+            return
+        }else if(!Validator.nameLiterals(name: name!)){
+            let alert = UIAlertController(title: "Ошибка", message: "Имя должно состоять только из букв", preferredStyle: UIAlertControllerStyle.alert)
+            alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
+            self.present(alert, animated: true, completion: nil)
+            self.saveBtn.isEnabled = true
+            return
+        }else if(!Validator.minLength(password: fmale!,length: 2)){
+            let alert = UIAlertController(title: "Ошибка", message: "Слишком короткая фамилия", preferredStyle: UIAlertControllerStyle.alert)
+            alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
+            self.present(alert, animated: true, completion: nil)
+            self.saveBtn.isEnabled = true
+            return
+        }else if(!Validator.nameLiterals(name: fmale!)){
+            let alert = UIAlertController(title: "Ошибка", message: "Фамилия должно состоять только из букв", preferredStyle: UIAlertControllerStyle.alert)
+            alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
+            self.present(alert, animated: true, completion: nil)
+            self.saveBtn.isEnabled = true
+            return
+        }else if(!Validator.validatePhoneNumber(phone: phone!)){
+            let alert = UIAlertController(title: "Ошибка", message: "Номер телефона должен быть формата: +375XXYYYYYYY", preferredStyle: UIAlertControllerStyle.alert)
+            alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
+            self.present(alert, animated: true, completion: nil)
+            self.saveBtn.isEnabled = true
+            return
         }else{
-             return settings[section-1]["name"] as? String
+            sendHashToTheServer(name: name!, fmale: fmale!, phone: phone!)
         }
+        
     }
     
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        if indexPath.section == 0{
-            return 300
-        }else{
-            return 40
-        }
+    
+    
+    private func sendHashToTheServer(name:String,fmale:String, phone:String){
+        let session = Singleton.currentUser().getUser()?.getProfile()?["session"] as! String
+        let dict = ["key":REST_URL.KEY.rawValue,"name":name, "surname":fmale, "phone":phone, "session":session]
+        JsonHelperLoad(url: REST_URL.SF_CHANGE_USER_DATA.rawValue, params: dict as Dictionary<String, AnyObject>, act: self, sessionName: "save").startSession()
     }
     
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if section == 0 {
-            return 1
-        }else{
-            let items = settings[section-1]["items"] as! [Dictionary<String,Any>]
-            return items.count
-        }
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        textFieldActive = textField
     }
     
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        if indexPath.section == 0 {
-            let cell = tableView.dequeueReusableCell(withIdentifier: "user_cell") as! UserTableViewCell
-            return cell
-        }else{
-            let cell = tableView.dequeueReusableCell(withIdentifier: "settings_cell")
-            let items = settings[indexPath.section - 1]["items"] as! [Dictionary<String,Any>]
-            let item = items[indexPath.row]
-            if item["value"] as! Bool == true{
-                cell!.accessoryType = .checkmark
-            }
-            else{
-                cell!.accessoryType = .none
-            }
-            cell?.textLabel?.text = item["name"] as? String
-            return cell!
-
-        }
-    }
     
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if indexPath.section != 0 {
-            let type = settings[indexPath.section - 1]["type"] as? String
-            var items = settings[indexPath.section - 1]["items"] as! [Dictionary<String,Any>]
-            var item = items[indexPath.row]
-            let value = item["value"] as! Bool
+    func keyboardWillShow(notification: NSNotification) {
+        
+        if let keyboardSize = (notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue {
             
-            if(type == "check"){
-                if !value {
-                    items[indexPath.row]["value"] = true
-                    if let cell = tableView.cellForRow(at: indexPath) {
-                        cell.accessoryType = .checkmark
-                    }
-                }else{
-                    items[indexPath.row]["value"] = false
-                    if let cell = tableView.cellForRow(at: indexPath) {
-                        cell.accessoryType = .none
-                    }
+            if let field = textFieldActive {
+                let delta:CGFloat = 40
+                let fieldHeight = field.frame.height
+                let fieldYPosition = field.frame.origin.y
+                let viewHeight = view.frame.height
+                let viewYposition = view.frame.origin.y
+                let keyboardH = keyboardSize.height
+                let distance = viewHeight - (fieldYPosition + fieldHeight + delta) - keyboardH - viewYposition
+                if distance < 0{
+                    self.view.frame.origin.y += distance
                 }
             }
-            print(settings)
         }
+        
     }
     
+    func keyboardWillHide(notification: NSNotification) {
+        self.view.frame.origin.y = 0
+    }
+    
+    
+    func loadComplete(obj: Dictionary<String, AnyObject>?, sessionName: String?) {
+        if let status = obj?["status"] as? String{
+            if status == "successful" {
+                let alert = UIAlertController(title: "Успешно", message: "Данные сохранены", preferredStyle: UIAlertControllerStyle.alert)
+                alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
+                self.present(alert, animated: true, completion: nil)
+            }else{
+                let alert = UIAlertController(title: "Ошибка", message: "Соединение с сервером", preferredStyle: UIAlertControllerStyle.alert)
+                alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
+                self.present(alert, animated: true, completion: nil)
+            }
+        }else{
+            let alert = UIAlertController(title: "Ошибка", message: "Соединение с сервером", preferredStyle: UIAlertControllerStyle.alert)
+            alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
+            self.present(alert, animated: true, completion: nil)
+        }
+        self.saveBtn.isEnabled = true
+    }
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
+    }
+    
+    func scrollViewTapped(recognizer: UIGestureRecognizer) {
+        self.view.endEditing(true)
+    }
+    
+    private func initViews(){
         
+        if let name = Singleton.currentUser().getUser()?.getProfile()?["firstName"] as? String {
+            self.name.text = name
+        }
+        
+        if let surname = Singleton.currentUser().getUser()?.getProfile()?["lastName"] as? String {
+            self.fmale.text = surname
+        }
+
+        if let phone = Singleton.currentUser().getUser()?.getProfile()?["phone"] as? String {
+            self.phone.text = "+375\(phone)"
+        }
+        
+        name.delegate = self
+        fmale.delegate = self
+        phone.delegate = self
+
+        saveBtn.layer.cornerRadius = 5.0
+       
+        let attributes = [
+            NSForegroundColorAttributeName: UIColor.lightGray
+        ]
+        name.attributedPlaceholder = NSAttributedString(string: "Имя", attributes:attributes)
+        fmale.attributedPlaceholder = NSAttributedString(string: "Фамилия", attributes:attributes)
+        phone.attributedPlaceholder = NSAttributedString(string: "Номер телефона", attributes:attributes)
+        
+        name.returnKeyType = UIReturnKeyType.done
+        fmale.returnKeyType = UIReturnKeyType.done
+        phone.returnKeyType = UIReturnKeyType.done
+
+    }
 
 }
