@@ -14,5 +14,4 @@ protocol UserInterface {
     func getBasket()->Basket
     func getPoints()->Int
     func setPoints(points:Int)
-
 }

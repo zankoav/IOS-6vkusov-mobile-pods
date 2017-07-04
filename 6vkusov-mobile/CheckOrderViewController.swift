@@ -34,8 +34,20 @@ class CheckOrderViewController: BaseViewController, UITextFieldDelegate, LoadJso
     private var textFieldActive:UITextField?
     private let user = Singleton.currentUser().getUser()
     
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        self.navigationController?.isNavigationBarHidden = true
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.navigationController?.isNavigationBarHidden = false
+        
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.title = "Оформление заказа"
         let attributes = [NSForegroundColorAttributeName: UIColor.lightGray]
         name.attributedPlaceholder = NSAttributedString(string: "Имя", attributes:attributes)
         mobile.attributedPlaceholder = NSAttributedString(string: "Телефон", attributes:attributes)
@@ -44,7 +56,7 @@ class CheckOrderViewController: BaseViewController, UITextFieldDelegate, LoadJso
         flat.attributedPlaceholder = NSAttributedString(string: "Квартира", attributes:attributes)
         porch.attributedPlaceholder = NSAttributedString(string: "Подъезд", attributes:attributes)
         floor.attributedPlaceholder = NSAttributedString(string: "Этаж", attributes:attributes)
-        intercom.attributedPlaceholder = NSAttributedString(string: "Промокод", attributes:attributes)
+        intercom.attributedPlaceholder = NSAttributedString(string: "Код домофона", attributes:attributes)
         note.attributedPlaceholder = NSAttributedString(string: "Комментарий", attributes:attributes)
         promo.attributedPlaceholder = NSAttributedString(string: "Промокод", attributes:attributes)
         
@@ -69,13 +81,15 @@ class CheckOrderViewController: BaseViewController, UITextFieldDelegate, LoadJso
             
         }
         let price = user!.getBasket().getTotalPrice()
-        totalPrice.text = price.getTowNumberAfter()
+        totalPrice.text = "\(price)".twoNumbersAfterPoint()
         totalPoints.text = "\(user!.getBasket().getTotalPoints())"
+        
+        self.sendButton.layer.masksToBounds = true
+        self.sendButton.layer.cornerRadius = 5
 
     }
     
     func loadComplete(obj: Dictionary<String, AnyObject>?, sessionName: String?) {
-        print(obj)
         if let response = obj {
             let appearance = SCLAlertView.SCLAppearance(
                 kTitleFont: UIFont(name: "HelveticaNeue", size: 20)!,
@@ -99,16 +113,13 @@ class CheckOrderViewController: BaseViewController, UITextFieldDelegate, LoadJso
                     self.sendButton.isEnabled = true
                     Singleton.currentUser().getUser()?.getBasket().productItems = [ProductItem]()
                     let price = response["totalPrice"] as! Float
-                    alert.showSuccess("Заказ принят!", subTitle: "Ваш заказ №\(response["order"] as! Int), через несколько минут Вам перезвонит оператор, сумма заказа \(price.getTowNumberAfter()) рублей")
+                    alert.showSuccess("Заказ принят!", subTitle: "Ваш заказ №\(response["order"] as! Int), через несколько минут Вам перезвонит оператор, сумма заказа \("\(price)".twoNumbersAfterPoint()) рублей")
                 }else{
                     self.sendButton.isEnabled = true
                 }
             }else{
                 let price = response["totalPrice"] as! Float
-                let points = response["points"] as! Int
-                print(points)
-                Singleton.currentUser().getUser()?.setPoints(points: points)
-                alert.showSuccess("Заказ принят!", subTitle: "Ваш заказ №\(response["order"] as! Int), через несколько минут Вам перезвонит оператор, сумма заказа \(price.getTowNumberAfter()) рублей")
+                alert.showSuccess("Заказ принят!", subTitle: "Ваш заказ №\(response["order"] as! Int), через несколько минут Вам перезвонит оператор, сумма заказа \("\(price)".twoNumbersAfterPoint()) рублей")
             }
         }else{
             alertShow(textError: "Ошибка соединения ...")

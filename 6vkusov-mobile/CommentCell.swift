@@ -24,8 +24,8 @@ class CommentCell: UITableViewCell {
         super.setSelected(selected, animated: animated)
         icon.layer.masksToBounds = true
         icon.layer.cornerRadius = icon.bounds.width/2
-//        icon.layer.borderWidth = 1.0
-//        icon.layer.borderColor = UIColor.lightGray.cgColor
+        icon.layer.borderWidth = 2.0
+        icon.layer.borderColor = UIColor.white.cgColor
         // Configure the view for the selected state
     }
 

@@ -18,6 +18,8 @@ class RestaurantTableViewCell: UITableViewCell {
     @IBOutlet weak var deliveryTime: UILabel!
     @IBOutlet weak var likeCounts: UILabel!
     @IBOutlet weak var dislikesCounts: UILabel!
+    @IBOutlet weak var cardView: UIView!
+    @IBOutlet weak var workTime: UILabel!
     
     
     override func awakeFromNib() {
@@ -27,11 +29,7 @@ class RestaurantTableViewCell: UITableViewCell {
     
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
-        
-        
-        //        icon.layer.borderWidth = 1.0
-        //        icon.layer.borderColor = UIColor.lightGray.cgColor
-        // Configure the view for the selected state
+
     }
     
 

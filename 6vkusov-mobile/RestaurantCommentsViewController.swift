@@ -37,8 +37,8 @@ class RestaurantCommentsViewController: UITableViewController, LoadJson
     {
         let cell = tableView.dequeueReusableCell(withIdentifier: "comment_cell", for: indexPath) as! CommentCell
         let comment = comments[indexPath.row]
-        cell.icon.sd_setImage(with: URL(string: comment.userIconUrl!), placeholderImage: UIImage(named: "userComment"))
-        cell.like.image = comment.userLike == 1 ? UIImage(named: "like") : UIImage(named: "dislike")
+        cell.icon.sd_setImage(with: URL(string: comment.userIconUrl!), placeholderImage: UIImage(named: "user_new"))
+        cell.like.image = comment.userLike == 1 ? UIImage(named: "thumbs-up") : UIImage(named: "thumbs-down")
         cell.name.text = comment.uerName
         cell.textCommnet.text = comment.text
         cell.time.text = comment.created

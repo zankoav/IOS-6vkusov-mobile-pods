@@ -36,7 +36,7 @@ class ProductItemTableViewCell: UITableViewCell {
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
         remove.layer.masksToBounds = true
-        remove.layer.cornerRadius = remove.bounds.width/2
+        remove.layer.cornerRadius = 5
         icon.layer.masksToBounds = true
         icon.layer.cornerRadius = 5
         // Configure the view for the selected state

@@ -23,7 +23,6 @@ class RemmemberPasswordViewController: BaseViewController, UITextFieldDelegate, 
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
 
-        // Do any additional setup after loading the view.
     }
     
     func textFieldDidBeginEditing(_ textField: UITextField) {
@@ -57,6 +56,17 @@ class RemmemberPasswordViewController: BaseViewController, UITextFieldDelegate, 
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
         return true
+    }
+    
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.navigationController?.isNavigationBarHidden = false
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        self.navigationController?.isNavigationBarHidden = true
     }
     
     

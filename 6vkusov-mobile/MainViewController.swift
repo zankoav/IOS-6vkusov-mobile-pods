@@ -15,16 +15,29 @@ class MainViewController: BaseViewController {
     @IBOutlet weak var registerMenu: UIView!
     @IBOutlet weak var loginButton: UIButton!
     @IBOutlet weak var logoMenu: UIImageView!
+    @IBOutlet weak var buttonAvatar: UIButton!
     
     private let singleton = Singleton.currentUser()
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        navigationController?.navigationBar.barStyle = UIBarStyle.black
         navigationController?.navigationBar.tintColor = UIColor.white
-        log(logMessage: "MainViewController Loading ...")
         singleton.initStore(vc: self)
-        // Do any additional setup after loading the view, typically from a nib.
+        
+        self.logoMenu.layer.cornerRadius = self.logoMenu.frame.size.width / 2
+        self.logoMenu.clipsToBounds = true
+        self.logoMenu.layer.borderWidth = 3.0
+        self.logoMenu.layer.borderColor = UIColor.white.cgColor
+        
+        
+        let gradient = Gradient()
+        let backgroundLayer = gradient.gl
+        var frame = (self.navigationController?.navigationBar.frame)!
+        frame.origin.x = 0
+        frame.origin.y = 0
+        backgroundLayer?.frame = frame
+        self.navigationController?.navigationBar.layer.insertSublayer(backgroundLayer!, at: 0)
+        self.navigationController?.isNavigationBarHidden = true
     }
     
     override func viewDidDisappear(_ animated: Bool) {
@@ -34,7 +47,7 @@ class MainViewController: BaseViewController {
         registerMenu.isHidden = singleton.getUser()?.getStatus() != STATUS.REGISTRED
         
         if singleton.getUser()?.getStatus() == STATUS.GENERAL {
-            logoMenu.image = UIImage(named:"user")
+            logoMenu.image = UIImage(named:"user_new")
             loginButton.setTitle("Войти", for: UIControlState.normal)
             loginButton.setTitle("Войти", for: UIControlState.selected)
             loginButton.setTitle("Войти", for: UIControlState.highlighted)
@@ -50,11 +63,17 @@ class MainViewController: BaseViewController {
             let img_path = userData?["img_path"] as! String
             if let avatar = userData?["avatar"] as? String {
                 let url = REST_URL.SF_DOMAIN.rawValue + img_path + "/" + avatar
-                logoMenu.sd_setImage(with: URL(string: url), placeholderImage: UIImage(named:"checkBoxOn"))
+                
+                logoMenu.sd_setImage(with: URL(string: url), placeholderImage: UIImage(named:"user_new"))
             }
 
         }
-        
+    }
+    
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        self.navigationController?.isNavigationBarHidden = false
     }
 
     override func didReceiveMemoryWarning() {

@@ -28,6 +28,11 @@ class ProductItem {
         _count += 1
     }
     
+    func minusCount(){
+        _count -= 1
+    }
+
+    
     func addCountTo(count:Int){
         _count += count
     }
@@ -36,10 +41,6 @@ class ProductItem {
         _count = count
     }
     
-    
-    func minusCount(){
-        _count -= 1
-    }
     
     var id: Int{
         return _id

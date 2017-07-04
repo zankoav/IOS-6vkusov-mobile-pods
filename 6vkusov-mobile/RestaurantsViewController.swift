@@ -43,8 +43,15 @@ class RestaurantsViewController: BaseViewController, UITableViewDelegate, UITabl
         }
     }
     
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        self.navigationController?.isNavigationBarHidden = true
+    }
+
+    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        self.navigationController?.isNavigationBarHidden = false
         if isFavorite {
             restaurants = [Restaurant]()
             self.tableView.reloadData()
@@ -165,7 +172,8 @@ class RestaurantsViewController: BaseViewController, UITableViewDelegate, UITabl
         self.searchController.searchBar.placeholder = "Поиск ресторана"
         self.searchController.searchBar.setValue("Отмена", forKey: "cancelButtonText")
         self.searchController.searchResultsUpdater = self
-        self.tableView.tableHeaderView = self.searchController.searchBar
+//        self.searchController.searchBar.isHidden = true
+//        self.tableView.tableHeaderView = self.searchController.searchBar
         let cancelButtonAttributes: NSDictionary = [NSForegroundColorAttributeName: UIColor.white]
         UIBarButtonItem.appearance().setTitleTextAttributes(cancelButtonAttributes as? [String : AnyObject], for: UIControlState.normal)
         newBtn.addTarget(self, action: #selector(filterChanged), for: UIControlEvents.touchUpInside)
@@ -195,6 +203,8 @@ class RestaurantsViewController: BaseViewController, UITableViewDelegate, UITabl
         UIView.animate(withDuration: 0.6) {self.view.layoutIfNeeded()}
     }
     
+
+    
     func updateSearchResults(for searchController: UISearchController)
     {
         self.restaurantsFiltred = self.restaurants.filter
@@ -207,7 +217,7 @@ class RestaurantsViewController: BaseViewController, UITableViewDelegate, UITabl
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat
     {
-        return  UIScreen.main.bounds.height/3.5
+        return  160.0
     }
     
     func numberOfSections(in tableView: UITableView) -> Int
@@ -225,12 +235,15 @@ class RestaurantsViewController: BaseViewController, UITableViewDelegate, UITabl
         let cell = tableView.dequeueReusableCell(withIdentifier: "restaurant_cell", for: indexPath) as! RestaurantTableViewCell
         let restaurant = tableView == self.tableView ? restaurants[indexPath.row] : restaurantsFiltred[indexPath.row]
         cell.name.text = restaurant.name
+        
         cell.kichenType.text = restaurant.kitchens
         cell.deliveryPrice.text = "\(restaurant.minimal_price) руб"
+        cell.workTime.text = "\(restaurant.working_time)"
         cell.deliveryTime.text = "\(restaurant.delivery_time) мин"
         cell.likeCounts.text = "\(restaurant.comments["likes"]!)"
         cell.dislikesCounts.text = "\(restaurant.comments["dislikes"]!)"
-        cell.icon.sd_setImage(with: URL(string: restaurant.iconURL), placeholderImage: UIImage(named:"checkBoxOn"))
+        cell.cardView.dropShadow()
+        cell.icon.sd_setImage(with: URL(string: restaurant.iconURL), placeholderImage: UIImage(named:"rest_back"))
         return cell
     }
     

@@ -21,6 +21,18 @@ class CategoriesViewController: BaseViewController, UITableViewDelegate, UITable
         main_categories = Singleton.currentUser().getStore()!.getMainCategories()
         secoundary_categories = Singleton.currentUser().getStore()!.getSecoundaryCategories()
     }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.navigationController?.isNavigationBarHidden = false
+    }
+    
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        self.navigationController?.isNavigationBarHidden = true
+    }
+
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -53,11 +65,13 @@ class CategoriesViewController: BaseViewController, UITableViewDelegate, UITable
         if(indexPath.section == 0) {
             let cell = tableView.dequeueReusableCell(withIdentifier: "main_category")! as! CategoryTVCell
             cell.name.text = main_categories[indexPath.row].name
-            cell.icon.sd_setImage(with: URL(string: main_categories[indexPath.row].iconURL!), placeholderImage: UIImage(named:"checkBoxOn"))
+            cell.icon.sd_setImage(with: URL(string: main_categories[indexPath.row].iconURL!), placeholderImage: UIImage(named:"category"))
             return cell
         }else{
             let cell = tableView.dequeueReusableCell(withIdentifier: "secondery_category")! as UITableViewCell
             cell.textLabel?.text = secoundary_categories[indexPath.row].name
+            cell.contentView.backgroundColor = UIColor.init(netHex: 0xfffdfb)
+            cell.textLabel?.textColor = UIColor.gray
             return cell
         }
     }
@@ -71,6 +85,20 @@ class CategoriesViewController: BaseViewController, UITableViewDelegate, UITable
         }
         self.navigationController?.pushViewController(vc, animated: true)
     }
+    
+    func tableView(_ tableView: UITableView, didHighlightRowAt indexPath: IndexPath) {
+        let cell:UITableViewCell = tableView.cellForRow(at: indexPath)!
+        cell.contentView.backgroundColor = UIColor.init(netHex: 0xffd4b8 )
+        cell.textLabel?.textColor = UIColor.init(netHex: 0xfffdfb)
+    }
+    
+    func tableView(_ tableView: UITableView, didUnhighlightRowAt indexPath: IndexPath) {
+        let cell:UITableViewCell = tableView.cellForRow(at: indexPath)!
+        cell.contentView.backgroundColor = UIColor.init(netHex: 0xfffdfb)
+        cell.textLabel?.textColor = UIColor.gray
+    }
+    
+
 
 
 }

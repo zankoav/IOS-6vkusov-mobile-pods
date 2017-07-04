@@ -21,8 +21,14 @@ class ProductsTableViewController: UITableViewController, BasketViewDelegate, Re
     private var label:UILabel!
     var width = UIScreen.main.bounds.width
     
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        self.navigationController?.isNavigationBarHidden = true
+    }
+    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        self.navigationController?.isNavigationBarHidden = false
         Singleton.currentUser().getUser()?.getBasket().initBasketFormServerForRegisterUser()
         Singleton.currentUser().getUser()?.getBasket().delegate = self
         Singleton.currentUser().getUser()?.getBasket().delegateReloadData = self
@@ -39,11 +45,11 @@ class ProductsTableViewController: UITableViewController, BasketViewDelegate, Re
         self.tableView.estimatedSectionHeaderHeight = width/2
         
         let containView = UIView(frame: CGRect(x:0, y:0,width:70, height:40))
-        label = UILabel(frame: CGRect(x:40, y:5, width:20, height:20))
+        label = UILabel(frame: CGRect(x:40, y:5, width:24, height:24))
         label.textColor = UIColor.white
         label.backgroundColor = UIColor(netHex: 0x8FB327)
         label.layer.masksToBounds = true
-        label.font = UIFont.systemFont(ofSize: 9)
+        label.font = UIFont.systemFont(ofSize: 10)
         label.layer.cornerRadius = label.bounds.height/2
         label.textAlignment = NSTextAlignment.center
         containView.addSubview(label)
@@ -118,11 +124,13 @@ class ProductsTableViewController: UITableViewController, BasketViewDelegate, Re
         let variant = products[indexPath.section].variants[indexPath.row]
         cell.variant = products[indexPath.section].variants[indexPath.row]
         cell.vc = self
-        
+        borderView(view: cell.count)
+        borderView(view: cell.add)
+        borderView(view: cell.minus)
         let price = Float(variant.count)*variant.price
-        print("\(price)  - \(price.getTowNumberAfter())")
-        cell.price.text = variant.count == 0 ? variant.price.getTowNumberAfter() : price.getTowNumberAfter()
-        
+        cell.price.text = variant.count == 0 ?
+            "\(variant.price)".twoNumbersAfterPoint() :
+            "\(price)".twoNumbersAfterPoint()
         var desc = ""
         if let size = variant.size {
             desc = size
@@ -135,11 +143,19 @@ class ProductsTableViewController: UITableViewController, BasketViewDelegate, Re
         return cell
     }
     
+    private func borderView(view:UIView){
+        view.layer.cornerRadius = 5
+        view.layer.borderColor = UIColor.gray.cgColor
+        view.layer.borderWidth = 1
+    }
+    
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let cell = tableView.dequeueReusableCell(withIdentifier: "header") as! ProductHeaderViewCell
         cell.name.text = products[section].name
         cell.desc.text = products[section].description
         cell.icon.sd_setImage(with: URL(string: products[section].icon), placeholderImage: UIImage(named:"avatar"))
+        cell.icon.layer.masksToBounds = true
+        cell.icon.layer.cornerRadius = 5
         return cell.contentView
     }
     
@@ -166,7 +182,7 @@ class ProductsTableViewController: UITableViewController, BasketViewDelegate, Re
     }
     
     override func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
-        return 60.0
+        return 70.0
     }
     
 }

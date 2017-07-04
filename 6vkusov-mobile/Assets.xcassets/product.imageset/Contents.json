@@ -2,17 +2,17 @@
   "images" : [
     {
       "idiom" : "universal",
-      "filename" : "vk-social-network-logo.png",
+      "filename" : "product.jpg",
       "scale" : "1x"
     },
     {
       "idiom" : "universal",
-      "filename" : "vk-social-network-logo@2x.png",
+      "filename" : "product@2x.jpg",
       "scale" : "2x"
     },
     {
       "idiom" : "universal",
-      "filename" : "vk-social-network-logo@3x.png",
+      "filename" : "product@3x.jpg",
       "scale" : "3x"
     }
   ],

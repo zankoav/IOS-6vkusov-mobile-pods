@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="12121" systemVersion="16F73" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12089"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="ProfileViewHeader" customModule="_vkusov_mobile" customModuleProvider="target">
+            <connections>
+                <outlet property="bonus" destination="u28-7k-ApZ" id="7uQ-ON-eNt"/>
+                <outlet property="callFriendsBtn" destination="hP0-w5-wp5" id="mNx-WE-tPn"/>
+                <outlet property="changeBtn" destination="1HK-ie-btW" id="pbd-Rp-CD8"/>
+                <outlet property="email" destination="mlt-o4-VbI" id="Voi-jH-9Pb"/>
+                <outlet property="icon" destination="Hes-bC-vnm" id="Iad-bM-lDR"/>
+                <outlet property="name" destination="WPN-lB-kat" id="awN-no-IlI"/>
+                <outlet property="phone" destination="0N3-9k-1mr" id="NhR-cx-MlB"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="iN0-l3-epB">
+            <rect key="frame" x="0.0" y="0.0" width="375" height="180"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Hes-bC-vnm">
+                    <rect key="frame" x="12" y="16" width="120" height="120"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="120" id="e6e-Bc-AvC"/>
+                        <constraint firstAttribute="height" constant="120" id="f7p-GU-tVK"/>
+                    </constraints>
+                </imageView>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Саша" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="WPN-lB-kat">
+                    <rect key="frame" x="139.5" y="16" width="227.5" height="21.5"/>
+                    <fontDescription key="fontDescription" type="boldSystem" pointSize="18"/>
+                    <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="zankoav@mail.ru" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mlt-o4-VbI">
+                    <rect key="frame" x="139.5" y="45.5" width="227.5" height="17"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                    <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="+375292228386" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0N3-9k-1mr">
+                    <rect key="frame" x="139.5" y="71" width="227.5" height="17"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                    <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1HK-ie-btW">
+                    <rect key="frame" x="12" y="148" width="120" height="27"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                    <state key="normal" title="Редактировать">
+                        <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </state>
+                    <connections>
+                        <action selector="clickSettingsChange:" destination="-1" eventType="touchUpInside" id="CdV-O1-sqO"/>
+                    </connections>
+                </button>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hP0-w5-wp5">
+                    <rect key="frame" x="243" y="148" width="120" height="27"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                    <state key="normal" title="Позвать друга">
+                        <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </state>
+                    <connections>
+                        <action selector="clickCallFriends:" destination="-1" eventType="touchUpInside" id="eJc-3X-HG5"/>
+                    </connections>
+                </button>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="100" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="u28-7k-ApZ">
+                    <rect key="frame" x="140" y="96" width="28.5" height="21"/>
+                    <color key="backgroundColor" red="0.56078431370000004" green="0.70196078429999997" blue="0.1529411765" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                    <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    <nil key="highlightedColor"/>
+                </label>
+            </subviews>
+            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+            <constraints>
+                <constraint firstItem="1HK-ie-btW" firstAttribute="trailing" secondItem="Hes-bC-vnm" secondAttribute="trailing" id="2tQ-OF-suG"/>
+                <constraint firstItem="1HK-ie-btW" firstAttribute="leading" secondItem="Hes-bC-vnm" secondAttribute="leading" id="63f-eo-m7a"/>
+                <constraint firstItem="0N3-9k-1mr" firstAttribute="top" secondItem="mlt-o4-VbI" secondAttribute="bottom" constant="8.5" id="6KI-zy-3g2"/>
+                <constraint firstItem="mlt-o4-VbI" firstAttribute="top" secondItem="WPN-lB-kat" secondAttribute="bottom" constant="8" id="7b9-P8-3lr"/>
+                <constraint firstItem="WPN-lB-kat" firstAttribute="leading" secondItem="Hes-bC-vnm" secondAttribute="trailing" constant="7.5" id="CRd-eT-hDE"/>
+                <constraint firstItem="WPN-lB-kat" firstAttribute="top" secondItem="Hes-bC-vnm" secondAttribute="top" id="HIR-U6-iVf"/>
+                <constraint firstItem="u28-7k-ApZ" firstAttribute="leading" secondItem="0N3-9k-1mr" secondAttribute="leading" id="Jsg-ZN-uEc"/>
+                <constraint firstItem="Hes-bC-vnm" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="12" id="LxE-K3-be2"/>
+                <constraint firstItem="hP0-w5-wp5" firstAttribute="width" secondItem="1HK-ie-btW" secondAttribute="width" id="N3H-Fn-fLu"/>
+                <constraint firstItem="0N3-9k-1mr" firstAttribute="trailing" secondItem="mlt-o4-VbI" secondAttribute="trailing" id="Nmh-xm-euf"/>
+                <constraint firstItem="1HK-ie-btW" firstAttribute="top" secondItem="Hes-bC-vnm" secondAttribute="bottom" constant="12" id="OSz-Fc-8f3"/>
+                <constraint firstItem="hP0-w5-wp5" firstAttribute="centerY" secondItem="1HK-ie-btW" secondAttribute="centerY" id="P8t-ZD-ML5"/>
+                <constraint firstItem="u28-7k-ApZ" firstAttribute="top" secondItem="0N3-9k-1mr" secondAttribute="bottom" constant="8" id="QeE-Tt-jWF"/>
+                <constraint firstItem="0N3-9k-1mr" firstAttribute="leading" secondItem="mlt-o4-VbI" secondAttribute="leading" id="Uj1-h9-yix"/>
+                <constraint firstAttribute="trailing" secondItem="hP0-w5-wp5" secondAttribute="trailing" constant="12" id="fKN-cd-2Bx"/>
+                <constraint firstAttribute="trailing" secondItem="WPN-lB-kat" secondAttribute="trailing" constant="8" id="kaQ-fu-mAw"/>
+                <constraint firstItem="Hes-bC-vnm" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="16" id="t4v-Jv-gMZ"/>
+                <constraint firstItem="mlt-o4-VbI" firstAttribute="leading" secondItem="WPN-lB-kat" secondAttribute="leading" id="uG3-Sb-eti"/>
+                <constraint firstItem="mlt-o4-VbI" firstAttribute="trailing" secondItem="WPN-lB-kat" secondAttribute="trailing" id="vrv-zT-Vy3"/>
+            </constraints>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <point key="canvasLocation" x="11.5" y="-88"/>
+        </view>
+    </objects>
+</document>

@@ -23,6 +23,18 @@ class BasketViewCntroller: BaseViewController, UITableViewDataSource, UITableVie
     @IBOutlet weak var totalPrice: UILabel!
     @IBOutlet weak var buttonOrder: UIButton!
     
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        self.navigationController?.isNavigationBarHidden = true
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.navigationController?.isNavigationBarHidden = false
+
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.title = "Корзина"
@@ -40,9 +52,9 @@ class BasketViewCntroller: BaseViewController, UITableViewDataSource, UITableVie
     
     func updateChekList(){
         let priceFromItems = basket.getTotalPriceFromItems()
-        totalPriceItems.text = priceFromItems.getTowNumberAfter()
+        totalPriceItems.text = "\(priceFromItems)".twoNumbersAfterPoint()
         let price = basket.getTotalPrice()
-        totalPrice.text = price.getTowNumberAfter()
+        totalPrice.text = "\(price)".twoNumbersAfterPoint()
         bonusCount.text = "\(basket.getTotalPoints())"
         let ready = basket.isBasketReady()
         buttonOrder.isEnabled = ready
@@ -51,7 +63,7 @@ class BasketViewCntroller: BaseViewController, UITableViewDataSource, UITableVie
             buttonOrder.setTitle("ОФОРМИТЬ ЗАКАЗ", for: UIControlState.normal)
         }else{
             let price = basket.getMinimalPrice()
-            buttonOrder.setTitle("Минимальная сумма заказа \(price.getTowNumberAfter()) руб.", for: UIControlState.normal)
+            buttonOrder.setTitle("Минимальная сумма заказа \("\(price)".twoNumbersAfterPoint()) руб.", for: UIControlState.normal)
         }
         self.tableView.reloadData()
     }
@@ -80,9 +92,12 @@ class BasketViewCntroller: BaseViewController, UITableViewDataSource, UITableVie
         cell.productTableVC = self
         cell.productItem = basket.productItems[indexPath.row]
         cell.name.text = basket.productItems[indexPath.row].name
+        borderView(view: cell.count)
+        borderView(view: cell.add)
+        borderView(view: cell.minus)
         let variant = basket.productItems[indexPath.row].variant
         let price = variant.price * Float(basket.productItems[indexPath.row].count)
-        cell.totalPrice.text = price.getTowNumberAfter()
+        cell.totalPrice.text = "\(price)".twoNumbersAfterPoint()
         if let points = basket.productItems[indexPath.row].points{
             if points > 0 {
                 cell.add.isHidden = true
@@ -107,10 +122,17 @@ class BasketViewCntroller: BaseViewController, UITableViewDataSource, UITableVie
         
         cell.width.text = desc
 
-        
+        cell.icon.layer.masksToBounds = true
+        cell.icon.layer.cornerRadius = 5
         cell.icon.sd_setImage(with: URL(string: basket.productItems[indexPath.row].icon), placeholderImage: UIImage(named:"avatar"))
         
         return cell
+    }
+    
+    private func borderView(view:UIView){
+        view.layer.cornerRadius = 5
+        view.layer.borderColor = UIColor.gray.cgColor
+        view.layer.borderWidth = 1
     }
 
 }

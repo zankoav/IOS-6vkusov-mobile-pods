@@ -41,4 +41,5 @@ class Validator {
         let nameTest = NSPredicate(format:"SELF MATCHES %@", nameRegEx)
         return nameTest.evaluate(with: name)
     }
+    
 }

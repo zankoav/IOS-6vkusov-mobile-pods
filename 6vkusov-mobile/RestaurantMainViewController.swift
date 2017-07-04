@@ -21,7 +21,7 @@ class RestaurantMainViewController: BaseViewController, UITableViewDelegate, UIT
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        viewHeader = RestaurantViewHeader(frame: CGRect(x: 0, y: 0, width: self.widthScreen, height: self.widthScreen/1.5))
+        viewHeader = RestaurantViewHeader(frame: CGRect(x: 0, y: 0, width: self.widthScreen, height: self.widthScreen/1.2))
         viewHeader.favorite.isHidden = true
         let tabController = self.tabBarController as! RestaurantTabController
         restaurant = tabController.restaurant
@@ -55,7 +55,7 @@ class RestaurantMainViewController: BaseViewController, UITableViewDelegate, UIT
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         if section == 0{
-            return widthScreen/1.5
+            return widthScreen/1.2
         }else{
             return 28
         }
@@ -105,7 +105,6 @@ class RestaurantMainViewController: BaseViewController, UITableViewDelegate, UIT
         if let object = obj {
             if sessionName == "food" {
                 if let isFavorite = object["isFavorite"] as? Bool {
-                    print(isFavorite)
                     viewHeader.favorite.isChecked = isFavorite
                     viewHeader.favorite.isHidden = false
                 }

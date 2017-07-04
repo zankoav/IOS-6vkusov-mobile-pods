@@ -32,13 +32,22 @@ class LoginViewController: BaseViewController, UITextFieldDelegate, LoadJson {
         
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
-
-        // Do any additional setup after loading the view.
     }
     
     func textFieldDidBeginEditing(_ textField: UITextField) {
         textFieldActive = textField
     }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.navigationController?.isNavigationBarHidden = false
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        self.navigationController?.isNavigationBarHidden = true
+    }
+
     
     func keyboardWillShow(notification: NSNotification) {
         

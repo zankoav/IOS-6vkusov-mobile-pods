@@ -26,14 +26,14 @@ class VariantTableViewCell: UITableViewCell {
 
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
-
         // Configure the view for the selected state
     }
 
     @IBAction func buttonAdded(_ sender: Any) {
         variant.addCount()
         count.text = "\(variant.count)"
-        let priceStr = (Float(variant.count) * variant.price).getTowNumberAfter()
+        let priceF = Float(variant.count) * variant.price
+        let priceStr = "\(priceF)".twoNumbersAfterPoint()
         price.text = priceStr
     }
     
@@ -41,7 +41,7 @@ class VariantTableViewCell: UITableViewCell {
         if variant.count > 0 {
             variant.minusCount()
             count.text = "\(variant.count)"
-            let priceStr = (Float(variant.count) * variant.price).getTowNumberAfter()
+            let priceStr = "\(Float(variant.count) * variant.price)".twoNumbersAfterPoint()
             price.text = priceStr
         }
     }

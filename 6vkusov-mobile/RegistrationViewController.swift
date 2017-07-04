@@ -30,22 +30,32 @@ class RegistrationViewController: BaseViewController, UITextFieldDelegate, LoadJ
         self.view.addGestureRecognizer(theTap)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
-        // Do any additional setup after loading the view.
     }
+    
+    @IBAction func licenseButtonPressed(_ sender: Any) {
+        UIApplication.shared.openURL(NSURL(string: "https://6vkusov.by/userAgreement")! as URL)
+
+    }
+    
     
     func scrollViewTapped(recognizer: UIGestureRecognizer) {
         self.view.endEditing(true)
     }
-    
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.navigationController?.isNavigationBarHidden = false
     }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        self.navigationController?.isNavigationBarHidden = true
+    }
+    
     
     func textFieldDidBeginEditing(_ textField: UITextField) {
         textFieldActive = textField
     }
-
     
     func keyboardWillShow(notification: NSNotification) {
         
@@ -59,7 +69,7 @@ class RegistrationViewController: BaseViewController, UITextFieldDelegate, LoadJ
                 let viewYposition = view.frame.origin.y
                 let keyboardH = keyboardSize.height
                 let distance = viewHeight - (fieldYPosition + fieldHeight + delta) - keyboardH - viewYposition
-                if distance < 0{
+                if distance < 0 {
                     self.view.frame.origin.y += distance
                 }
             }

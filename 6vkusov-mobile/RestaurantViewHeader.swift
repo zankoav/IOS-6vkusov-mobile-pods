@@ -39,7 +39,7 @@ import UIKit
     }
     
     func loadComplete(obj: Dictionary<String, AnyObject>?, sessionName: String?) {
-        print(obj)
+        
     }
     
     private func commonInit()
