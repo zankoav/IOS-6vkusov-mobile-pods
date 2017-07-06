@@ -126,5 +126,7 @@ class BonusViewController: BaseViewController, UITextFieldDelegate, LoadJson{
         let attributes = [NSForegroundColorAttributeName: UIColor.lightGray]
         email.attributedPlaceholder = NSAttributedString(string: "Email", attributes:attributes)
         email.returnKeyType = UIReturnKeyType.done
+        email.keyboardType = .emailAddress
+
     }
 }

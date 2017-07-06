@@ -129,6 +129,8 @@ class RemmemberPasswordViewController: BaseViewController, UITextFieldDelegate, 
         ]
         email.attributedPlaceholder = NSAttributedString(string: "Email", attributes:attributes)
         email.returnKeyType = UIReturnKeyType.done
+        email.keyboardType = .emailAddress
+
     }
 
 

@@ -11,18 +11,29 @@ import UIKit
 class MainViewController: BaseViewController {
 
     @IBOutlet weak var lunchscreen: UIImageView!
+    @IBOutlet weak var logo: UIImageView!
+    @IBOutlet weak var logoBg: UIImageView!
+
     @IBOutlet weak var generalMenu: UIView!
     @IBOutlet weak var registerMenu: UIView!
     @IBOutlet weak var loginButton: UIButton!
     @IBOutlet weak var logoMenu: UIImageView!
     @IBOutlet weak var buttonAvatar: UIButton!
     
+    var load = false
+    
     private let singleton = Singleton.currentUser()
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        loginButton.isEnabled = false
+        buttonAvatar.isEnabled = false
+        enableView(view: generalMenu,enabled: false)
+        enableView(view: registerMenu,enabled: false)
+
         navigationController?.navigationBar.tintColor = UIColor.white
         singleton.initStore(vc: self)
+        
         
         self.logoMenu.layer.cornerRadius = self.logoMenu.frame.size.width / 2
         self.logoMenu.clipsToBounds = true
@@ -39,12 +50,57 @@ class MainViewController: BaseViewController {
         self.navigationController?.navigationBar.layer.insertSublayer(backgroundLayer!, at: 0)
         self.navigationController?.isNavigationBarHidden = true
     }
+
+    public func loading(){
+        
+        UIView.animate(withDuration: 0.4) { () -> Void in
+            self.logo.transform = CGAffineTransform(rotationAngle: CGFloat.pi)
+        }
+        
+        UIView.animate(withDuration: 0.4, delay: 0.35, animations: {
+            self.logo.transform = CGAffineTransform(rotationAngle: CGFloat.pi * 2.0)
+        }) { (true) in
+            if (self.load){
+                let categoriesViewController = self.storyboard?.instantiateViewController(withIdentifier: "CategoriesViewController")
+                self.navigationController?.pushViewController(categoriesViewController!, animated: true)
+            }else{
+                self.loading()
+            }
+        }
+    
+    }
+    
+    public func enableView(view: UIView, enabled: Bool){
+        for v in view.subviews{
+            if v is UIButton{
+                (v as! UIButton).isEnabled = enabled
+            }
+        }
+    }
     
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         lunchscreen.isHidden = true
-        generalMenu.isHidden = singleton.getUser()?.getStatus() != STATUS.GENERAL
-        registerMenu.isHidden = singleton.getUser()?.getStatus() != STATUS.REGISTRED
+        logo.isHidden = true
+        logoBg.isHidden = true
+
+        if(singleton.getUser()?.getStatus() != STATUS.GENERAL){
+            generalMenu.isHidden = true
+            enableView(view: generalMenu, enabled: false)
+        }else{
+            generalMenu.isHidden = false
+            enableView(view: generalMenu, enabled: true)
+        }
+        
+        if(singleton.getUser()?.getStatus() != STATUS.REGISTRED){
+            registerMenu.isHidden = true
+            enableView(view: registerMenu, enabled: false)
+        }else{
+            registerMenu.isHidden = false
+            enableView(view: registerMenu, enabled: true)
+        }
+        
+       
         
         if singleton.getUser()?.getStatus() == STATUS.GENERAL {
             logoMenu.image = UIImage(named:"user_new")
@@ -100,9 +156,20 @@ class MainViewController: BaseViewController {
     
     
     public func loadComplete(){
-        log(logMessage: "Complete Load")
-        let categoriesViewController = self.storyboard?.instantiateViewController(withIdentifier: "CategoriesViewController")
-        self.navigationController?.pushViewController(categoriesViewController!, animated: true)
+        self.load = true
+        loginButton.isEnabled = true
+        buttonAvatar.isEnabled = true
+        if(singleton.getUser()?.getStatus() != STATUS.GENERAL){
+            enableView(view: generalMenu, enabled: false)
+        }else{
+            enableView(view: generalMenu, enabled: true)
+        }
+        
+        if(singleton.getUser()?.getStatus() != STATUS.REGISTRED){
+            enableView(view: registerMenu, enabled: false)
+        }else{
+            enableView(view: registerMenu, enabled: true)
+        }
     }
     
     @IBAction func logoutUser(){
@@ -111,6 +178,10 @@ class MainViewController: BaseViewController {
             let store = self.singleton.getStore()
             store?.clearDataStorage(key: (store?.APP_PROFILE)!)
             self.lunchscreen.isHidden = false
+            self.logo.isHidden = false
+            self.logoBg.isHidden = false
+            self.loginButton.isEnabled = false
+            self.buttonAvatar.isEnabled = false
             self.singleton.initStore(vc: self)
         }))
         logoutAlert.addAction(UIAlertAction(title: "Отмена", style: .cancel, handler: { (action: UIAlertAction!) in

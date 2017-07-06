@@ -87,6 +87,10 @@ class LoginViewController: BaseViewController, UITextFieldDelegate, LoadJson {
                         store?.setStringValueStorage(key: (store?.APP_PROFILE)!, value: json!)
                         let vc = self.navigationController?.viewControllers.first as! MainViewController
                         vc.lunchscreen.isHidden = false
+                        vc.logo.isHidden = false
+                        vc.logoBg.isHidden = false
+                        vc.loginButton.isEnabled = false
+                        vc.buttonAvatar.isEnabled = false
                         Singleton.currentUser().initStore(vc: vc)
                         self.registrationBtn.isEnabled = true
                         let _ = self.navigationController?.popViewController(animated: true)
@@ -178,7 +182,9 @@ class LoginViewController: BaseViewController, UITextFieldDelegate, LoadJson {
         ]
         email.attributedPlaceholder = NSAttributedString(string: "Email", attributes:attributes)
         password.attributedPlaceholder = NSAttributedString(string: "Пароль", attributes:attributes)
-    
+        
+        email.keyboardType = .emailAddress
+        
         email.returnKeyType = UIReturnKeyType.done
         password.returnKeyType = UIReturnKeyType.done
     }

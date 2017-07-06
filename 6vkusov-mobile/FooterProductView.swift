@@ -12,6 +12,7 @@ import UIKit
 
     var view: UIView!
     
+    
     @IBOutlet weak var button: UIButton!
     @IBOutlet weak var points: UILabel!
     
@@ -43,6 +44,8 @@ import UIKit
             Singleton.currentUser().getUser()?.getBasket().addProductFromRestaurantOrder(product: product, slug: slug)
         }
     }
+    
+
     private func commonInit()
     {
         let bundle = Bundle(for: type(of: self))

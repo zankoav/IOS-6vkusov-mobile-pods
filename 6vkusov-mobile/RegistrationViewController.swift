@@ -214,6 +214,7 @@ class RegistrationViewController: BaseViewController, UITextFieldDelegate, LoadJ
         
         name.returnKeyType = UIReturnKeyType.done
         email.returnKeyType = UIReturnKeyType.done
+        email.keyboardType = .emailAddress
         password.returnKeyType = UIReturnKeyType.done
         passwordConfirm.returnKeyType = UIReturnKeyType.done
         promo.returnKeyType = UIReturnKeyType.done

@@ -35,8 +35,6 @@ public enum REST_URL: String {
     case SF_GET_USER_POINTS = "https://6vkusov.by/api/user_points"
     case SF_FOOD_POINTS = "https://6vkusov.by/api/food_points"
     case SF_CHANGE_USER_DATA = "https://6vkusov.by/api/change_user_data"
-
-
     
 }
 
@@ -55,7 +53,9 @@ class LocalStorage: LoadJson{
     
     init(vc: MainViewController) {
         self.vc = vc
-        
+        self.vc.load = false
+        self.vc.loading()
+
         clearDataStorage(key: APP_CATEGORIES)
         clearDataStorage(key: APP_RESTAURANTS)
         

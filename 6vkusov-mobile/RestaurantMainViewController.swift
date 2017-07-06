@@ -168,10 +168,13 @@ class RestaurantMainViewController: BaseViewController, UITableViewDelegate, UIT
                 menu.append(product.category)
             }
         }
+        var sortedMenu = menu.sorted(by: { $0["name"]! < $1["name"]! })
+        
         if isFreeFoodExists {
-            menu.insert(points, at: 0)
+            sortedMenu.insert(points, at: 0)
         }
-        return menu
+        
+        return sortedMenu
     }
     
 

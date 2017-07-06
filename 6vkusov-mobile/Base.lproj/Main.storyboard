@@ -715,6 +715,20 @@
                             <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_background" translatesAutoresizingMaskIntoConstraints="NO" id="q5Q-HI-E20">
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="504"/>
                             </imageView>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_logo_search" translatesAutoresizingMaskIntoConstraints="NO" id="ecP-Zk-cqr">
+                                <rect key="frame" x="60" y="102" width="200" height="200"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="200" id="ABn-xd-S2h"/>
+                                    <constraint firstAttribute="width" constant="200" id="NAY-DL-rm2"/>
+                                </constraints>
+                            </imageView>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_cercle" translatesAutoresizingMaskIntoConstraints="NO" id="mIr-OQ-KYM">
+                                <rect key="frame" x="75" y="182" width="50" height="50"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="50" id="2rL-4n-3OC"/>
+                                    <constraint firstAttribute="height" constant="50" id="zym-Tt-JGr"/>
+                                </constraints>
+                            </imageView>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
@@ -724,11 +738,14 @@
                             <constraint firstItem="q5Q-HI-E20" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="8Yq-1i-RHH"/>
                             <constraint firstItem="5P4-rE-CNS" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" id="9NL-d5-Zuo"/>
                             <constraint firstItem="5P4-rE-CNS" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" constant="40" id="BqN-gw-jjX"/>
+                            <constraint firstItem="ecP-Zk-cqr" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="Cuu-MP-RaQ"/>
                             <constraint firstItem="cRb-FI-ddu" firstAttribute="top" secondItem="NI8-Yg-I6f" secondAttribute="bottom" constant="20" id="DDW-wi-DM1"/>
+                            <constraint firstItem="ecP-Zk-cqr" firstAttribute="leading" secondItem="mIr-OQ-KYM" secondAttribute="trailing" constant="-65" id="Im3-yH-hOA"/>
                             <constraint firstItem="Xck-tG-PVD" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" id="KkK-3c-027"/>
                             <constraint firstItem="cRb-FI-ddu" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="Ksx-A3-8WS"/>
                             <constraint firstItem="7Nr-94-pal" firstAttribute="centerX" secondItem="N9Q-3N-BwX" secondAttribute="centerX" id="OEF-qP-eA9"/>
                             <constraint firstItem="q5Q-HI-E20" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" id="Pvk-Vy-3pU"/>
+                            <constraint firstItem="ecP-Zk-cqr" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" constant="-50" id="QWt-wa-hfA"/>
                             <constraint firstItem="7Nr-94-pal" firstAttribute="leading" secondItem="N9Q-3N-BwX" secondAttribute="leading" id="Spt-cF-ygY"/>
                             <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="Xck-tG-PVD" secondAttribute="bottom" id="Vkt-hT-KFT"/>
                             <constraint firstItem="NI8-Yg-I6f" firstAttribute="height" secondItem="gtC-1S-uUM" secondAttribute="height" id="YgZ-im-vjv"/>
@@ -748,6 +765,7 @@
                             <constraint firstItem="7Nr-94-pal" firstAttribute="width" secondItem="N9Q-3N-BwX" secondAttribute="width" id="xcg-m7-geG"/>
                             <constraint firstItem="cRb-FI-ddu" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" constant="40" id="z6c-Bj-Pbr"/>
                             <constraint firstItem="NI8-Yg-I6f" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" id="zGR-2m-Uld"/>
+                            <constraint firstItem="mIr-OQ-KYM" firstAttribute="top" secondItem="ecP-Zk-cqr" secondAttribute="top" constant="80" id="zOh-CJ-izT"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="Навигация" id="nn4-Gi-iXH"/>
@@ -755,6 +773,8 @@
                         <outlet property="buttonAvatar" destination="7Nr-94-pal" id="GYc-eN-p30"/>
                         <outlet property="generalMenu" destination="cRb-FI-ddu" id="Lga-5J-ccj"/>
                         <outlet property="loginButton" destination="NI8-Yg-I6f" id="0Or-mq-TUS"/>
+                        <outlet property="logo" destination="mIr-OQ-KYM" id="yQU-Kd-njc"/>
+                        <outlet property="logoBg" destination="ecP-Zk-cqr" id="XGI-T6-y3J"/>
                         <outlet property="logoMenu" destination="N9Q-3N-BwX" id="FfT-YI-ajs"/>
                         <outlet property="lunchscreen" destination="q5Q-HI-E20" id="dG3-CO-NEw"/>
                         <outlet property="registerMenu" destination="5P4-rE-CNS" id="KLS-t8-MCt"/>
@@ -1739,7 +1759,7 @@
                                 </constraints>
                                 <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits"/>
+                                <textInputTraits key="textInputTraits" keyboardType="emailAddress"/>
                             </textField>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="7KJ-nM-aqH">
                                 <rect key="frame" x="16" y="327" width="288" height="1"/>
@@ -3636,6 +3656,8 @@
         <image name="hamburger2" width="24" height="24"/>
         <image name="heart_big" width="32" height="32"/>
         <image name="ic_background" width="148" height="266"/>
+        <image name="ic_cercle" width="42" height="42"/>
+        <image name="ic_logo_search" width="129" height="129"/>
         <image name="info" width="21" height="21"/>
         <image name="like" width="42" height="42"/>
         <image name="logo" width="129" height="54"/>
@@ -3652,6 +3674,6 @@
         <image name="user_new" width="85" height="85"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="ziT-GZ-cTE"/>
+        <segue reference="0Rb-ck-fP0"/>
     </inferredMetricsTieBreakers>
 </document>

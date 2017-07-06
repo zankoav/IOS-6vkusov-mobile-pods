@@ -40,6 +40,8 @@ class ProductsTableViewController: UITableViewController, BasketViewDelegate, Re
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        
         self.title = titleCat
         self.tableView.sectionHeaderHeight = UITableViewAutomaticDimension
         self.tableView.estimatedSectionHeaderHeight = width/2
@@ -180,6 +182,9 @@ class ProductsTableViewController: UITableViewController, BasketViewDelegate, Re
             view.points.isHidden = !self.isFreeFood
         return view
     }
+    
+
+   
     
     override func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
         return 70.0
